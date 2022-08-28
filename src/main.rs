@@ -7,7 +7,8 @@ use canvas::Canvas;
 use export::save_png;
 use geometry::{nearest_pixel, Line, Ordered_Polygon};
 use rasterize::{
-    line_raster_bbox, rasterize_line_naive, rasterize_polygon_boundary, scanline_nodes,
+    line_raster_bbox, polygon_raster_bbox, rasterize_line_naive, rasterize_polygon_boundary,
+    scanline_nodes,
 };
 use seed::Seeds;
 extern crate voronoi;
@@ -41,5 +42,7 @@ fn main() {
     for node in &nodes {
         canvas.write_pixel(node[0] as usize, node[1] as usize, _RED);
     }
+    let bbox = polygon_raster_bbox(&poly);
+    println!("Bbox: {:?}, {:?}",bbox[0], bbox[1]);
     save_png("canvas.png", canvas);
 }

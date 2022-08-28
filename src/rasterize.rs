@@ -22,6 +22,38 @@ pub fn line_raster_bbox(line: &Line) -> [pixel; 2] {
         nearest_pixel(&Point::new(y_min, y_max)),
     ]
 }
+pub fn polygon_raster_bbox(poly: &Ordered_Polygon) -> [pixel; 2] {
+    let edges = poly.create_edges();
+    // let mut x_min = edges[0].points[0][0]; //arbitrarily choosing first edge point
+    // let mut y_min = edges[0].points[1][0];
+    // let mut x_max = edges[0].points[0][0];
+    // let mut y_max = edges[0].points[1][0];
+    let mut x_vals = Vec::new();
+    let mut y_vals = Vec::new();
+    for e in edges {
+        x_vals.push(e.points[0][0]);
+        x_vals.push(e.points[1][0]);
+        y_vals.push(e.points[0][1]);
+        y_vals.push(e.points[1][1]);
+
+    }
+    let n = x_vals.len();
+    x_vals.sort_by(|a, b| a.partial_cmp(b).unwrap());
+    y_vals.sort_by(|a, b| a.partial_cmp(b).unwrap());
+
+    let x_min = x_vals[0];
+    let y_min = y_vals[0];
+    let x_max = x_vals[n - 1];
+    let y_max = y_vals[n - 1];
+
+    // min and max values of bbox as pixels
+    [
+        nearest_pixel(&Point::new(x_min, x_max)), // (min_x, max_x)
+        nearest_pixel(&Point::new(y_min, y_max)), // (min_y, max_y)
+    ]
+}
+
+
 pub fn rasterize_line_naive(line: &Line, color: [f32; 3], canvas: &mut Canvas) {
     let line_bbox = line_raster_bbox(&line);
 
@@ -46,6 +78,10 @@ pub fn rasterize_polygon_boundary(poly: &Ordered_Polygon, color: [f32; 3], canva
     for edge in edges {
         rasterize_line_naive(&edge, color, canvas)
     }
+}
+
+pub fn scanline_rasterize_polygon(poly: &Ordered_Polygon, color: [f32; 3], canvas: &mut Canvas) {
+
 }
 
 pub fn scanline_nodes(poly: &Ordered_Polygon, scan_y: f64, width: f64) -> Vec<pixel> {
@@ -90,40 +126,5 @@ pub fn scanline_nodes(poly: &Ordered_Polygon, scan_y: f64, width: f64) -> Vec<pi
             nodes.push(node)
         }
     }
-
     nodes
-
-    // nodes
 }
-
-// def Scanline_nodes(polygon,scan_y, image_res):
-
-//     polygon_edges = Edges(polygon)
-//     nodes = []
-//     for edge in polygon_edges:
-//         edge = list(edge)
-//         p1y = edge[0][1]
-//         p2y = edge[1][1]
-
-//         ## If line crosses scanline
-//         if p1y < scan_y and p2y >= scan_y or p1y >= scan_y and p2y < scan_y:
-//             p1x = edge[0][0]
-//             p2x = edge[1][0]
-
-//             if p1x < 0:
-//                 p1x = 0
-//             if p1x >= image_res:
-//                 p1x = image_res - 1
-
-//             p1 = [p1x,p1y]
-//             p2 = [p2x,p2y]
-//             p3 = [0,scan_y]
-//             p4 = [image_res,scan_y]
-//             node = Line_Intersection(p1,p2,p3,p4)
-//             node = [Clamp(node[0],[0,image_res]),Clamp(node[1],[0,image_res])]
-//             nodes.append(node)
-
-//     if len(nodes) < 1:
-//         return False
-//     else:
-//         return nodes
