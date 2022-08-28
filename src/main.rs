@@ -8,7 +8,7 @@ use export::save_png;
 use geometry::{nearest_pixel, Line, Ordered_Polygon};
 use rasterize::{
     line_raster_bbox, polygon_raster_bbox, rasterize_line_naive, rasterize_polygon_boundary,
-    scanline_nodes,
+    scanline_nodes, rasterize_circle
 };
 use seed::Seeds;
 extern crate voronoi;
@@ -38,7 +38,6 @@ fn main() {
     let mut scanline;
     for y in bbox[1][0]..bbox[1][1] {
         //for y in y_min to y_max of polygon bbox
-        println!("{}", y);
         nodes = scanline_nodes(&poly, y as f64, WIDTH as f64);
         if nodes.len() > 0 {
             scanline = Line::from_nodes(&nodes);
@@ -47,6 +46,8 @@ fn main() {
             canvas.write_pixel(nodes[1][0] as usize, nodes[1][1] as usize, _GREEN);
         }
     }
+
+    rasterize_circle(&Point::new(100.0, 100.0), 50, _BLUE, &mut canvas);
 
     save_png("canvas.png", canvas);
 }

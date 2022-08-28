@@ -1,3 +1,5 @@
+use std::ops::Sub;
+
 use voronoi::{Point, DCEL};
 
 pub type point = [f64; 2];
@@ -17,6 +19,14 @@ pub struct Line {
 //return the nearest pixel as the floor of each floating point coordinate
 pub fn nearest_pixel(point: &Point) -> pixel {
     [point.x.floor() as i32, point.y.floor() as i32]
+}
+
+pub fn distance(a: &pixel, b: &pixel) -> f64 {
+
+    let _x = (b[0] - a[0]).pow(2) as f64;
+    let _y = (b[1] - a[1]).pow(2) as f64;
+
+    (_x + _y).sqrt()
 }
 
 impl Ordered_Polygon {

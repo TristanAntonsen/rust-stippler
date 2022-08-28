@@ -1,14 +1,10 @@
-use crate::geometry::{nearest_pixel, pixel, point, Ordered_Polygon, Line};
+use crate::geometry::{distance, nearest_pixel, pixel, point, Line, Ordered_Polygon};
 use crate::Canvas;
 use voronoi::Point;
 
-pub const _TEST_LINE: Line =  Line {
-    points: [
-        [200.0, 10.0],
-        [40.0, 200.0],
-    ]
+pub const _TEST_LINE: Line = Line {
+    points: [[200.0, 10.0], [40.0, 200.0]],
 };
-
 
 pub fn line_raster_bbox(line: &Line) -> [pixel; 2] {
     let x_min = f64::min(line.points[0][0], line.points[1][0]);
@@ -35,7 +31,6 @@ pub fn polygon_raster_bbox(poly: &Ordered_Polygon) -> [[i32; 2]; 2] {
         x_vals.push(e.points[1][0]);
         y_vals.push(e.points[0][1]);
         y_vals.push(e.points[1][1]);
-
     }
     let n = x_vals.len();
     x_vals.sort_by(|a, b| a.partial_cmp(b).unwrap());
@@ -53,7 +48,6 @@ pub fn polygon_raster_bbox(poly: &Ordered_Polygon) -> [[i32; 2]; 2] {
     ]
 }
 
-
 pub fn rasterize_line_naive(line: &Line, color: [f32; 3], canvas: &mut Canvas) {
     let line_bbox = line_raster_bbox(&line);
 
@@ -64,7 +58,7 @@ pub fn rasterize_line_naive(line: &Line, color: [f32; 3], canvas: &mut Canvas) {
 
     let dx = x2 - x1;
     let dy = y2 - y1;
-    
+
     let mut y;
     for x in i32::min(x1, x2)..i32::max(x1, x2) {
         y = y1 + dy * (x - x1) / dx;
@@ -73,19 +67,15 @@ pub fn rasterize_line_naive(line: &Line, color: [f32; 3], canvas: &mut Canvas) {
 }
 
 pub fn rasterize_polygon_boundary(poly: &Ordered_Polygon, color: [f32; 3], canvas: &mut Canvas) {
-
     let edges = poly.create_edges();
     for edge in edges {
         rasterize_line_naive(&edge, color, canvas)
     }
 }
 
-pub fn scanline_rasterize_polygon(poly: &Ordered_Polygon, color: [f32; 3], canvas: &mut Canvas) {
-
-}
+pub fn scanline_rasterize_polygon(poly: &Ordered_Polygon, color: [f32; 3], canvas: &mut Canvas) {}
 
 pub fn scanline_nodes(poly: &Ordered_Polygon, scan_y: f64, width: f64) -> Vec<pixel> {
-
     let mut nodes = Vec::new();
     let mut p1y;
     let mut p2y;
@@ -94,14 +84,13 @@ pub fn scanline_nodes(poly: &Ordered_Polygon, scan_y: f64, width: f64) -> Vec<pi
     let mut scanline;
     let mut line;
     let mut node: pixel;
-    
-    for edge in poly.create_edges() {
 
+    for edge in poly.create_edges() {
         p1y = edge.points[0][1];
         p2y = edge.points[1][1];
 
         // If line crosses scanline
-        if p1y < scan_y && p2y >= scan_y || p1y >= scan_y && p2y < scan_y{
+        if p1y < scan_y && p2y >= scan_y || p1y >= scan_y && p2y < scan_y {
             p1x = edge.points[0][0];
             p2x = edge.points[1][0];
 
@@ -109,16 +98,10 @@ pub fn scanline_nodes(poly: &Ordered_Polygon, scan_y: f64, width: f64) -> Vec<pi
                 p1x = 0.0
             }
             scanline = Line {
-                points: [
-                    [p1x,p1y],
-                    [p2x,p2y]
-                ]
+                points: [[p1x, p1y], [p2x, p2y]],
             };
             line = Line {
-                points: [
-                    [0.0,scan_y],
-                    [width, scan_y]
-                ]
+                points: [[0.0, scan_y], [width, scan_y]],
             };
 
             node = scanline.line_intersection(&line);
@@ -127,4 +110,20 @@ pub fn scanline_nodes(poly: &Ordered_Polygon, scan_y: f64, width: f64) -> Vec<pi
         }
     }
     nodes
+}
+
+pub fn rasterize_circle(point: &Point, radius: i32, color: [f32; 3], canvas: &mut Canvas) {
+    let x = point.x.floor() as i32;
+    let y = point.y.floor() as i32;
+    let mut d;
+
+    for _x in (x - radius)..(x + radius) {
+        for _y in (y - radius)..(y + radius) {
+            println!("({},{})",_x,_y);
+            d = distance(&[x,y], &[_x,_y]);
+            if d < radius as f64 {
+                canvas.write_pixel(_x as usize, _y as usize, color);
+            }
+        }
+    }
 }
