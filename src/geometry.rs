@@ -1,4 +1,4 @@
-pub type point = [f32; 2];
+pub type point = (f64, f64);
 pub type pixel = [usize; 2];
 
 pub struct Ordered_Polygon {
@@ -11,5 +11,5 @@ pub struct Line {
 
 //return the nearest pixel as the floor of each floating point coordinate
 pub fn nearest_pixel(point: &point) -> pixel {
-    [point[0].floor() as usize, point[1].floor() as usize]
+    [point.0.floor() as usize, point.1.floor() as usize]
 }
