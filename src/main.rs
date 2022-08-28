@@ -33,16 +33,21 @@ fn main() {
             [10.0, 120.0],
         ],
     };
-
-    rasterize_polygon_boundary(&poly, _GREEN, &mut canvas);
-
-    let nodes = scanline_nodes(&poly, 100.0, WIDTH as f64);
-    let scanline = Line::from_nodes(&nodes);
-    rasterize_line_naive(&scanline, _WHITE, &mut canvas);
-    for node in &nodes {
-        canvas.write_pixel(node[0] as usize, node[1] as usize, _RED);
-    }
     let bbox = polygon_raster_bbox(&poly);
-    println!("Bbox: {:?}, {:?}",bbox[0], bbox[1]);
+    let mut nodes;
+    let mut scanline;
+    for y in bbox[1][0]..bbox[1][1] {
+        //for y in y_min to y_max of polygon bbox
+        println!("{}", y);
+        nodes = scanline_nodes(&poly, y as f64, WIDTH as f64);
+        if nodes.len() > 0 {
+            scanline = Line::from_nodes(&nodes);
+            rasterize_line_naive(&scanline, _WHITE, &mut canvas);
+            for node in &nodes {
+                canvas.write_pixel(node[0] as usize, node[1] as usize, _RED);
+            }
+        }
+    }
+
     save_png("canvas.png", canvas);
 }
