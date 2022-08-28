@@ -1,6 +1,5 @@
 pub type point = (f64, f64);
 pub type pixel = [usize; 2];
-
 pub struct Ordered_Polygon {
     pub vertices: Vec<[f32; 2]>,
 }
