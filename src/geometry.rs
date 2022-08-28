@@ -3,7 +3,7 @@ use voronoi::{Point, DCEL};
 pub type point = [f64; 2];
 pub type pixel = [i32; 2];
 pub struct Ordered_Polygon {
-    pub vertices: Vec<[f32; 2]>,
+    pub vertices: Vec<[f64; 2]>,
 }
 
 pub struct Unordered_Polygon {
@@ -20,7 +20,29 @@ pub fn nearest_pixel(point: &Point) -> pixel {
     [point.x.floor() as i32, point.y.floor() as i32]
 }
 
-// pub fn extrac
+impl Ordered_Polygon {
+    pub fn create_edges(&self) -> Vec<Line> {
+        let n = self.vertices.len();
+        let mut lines = Vec::new();
+        for i in 0..(n-1) {
+            lines.push(Line {
+                points: [
+                    self.vertices[i],
+                    self.vertices[i + 1]
+                ]
+            })
+        };
+        lines.push(Line {
+            points: [
+                self.vertices[n - 1],
+                self.vertices[0]
+            ]
+        });
+
+        lines
+    }
+}
+
 
 impl Line {
     pub fn from_halfedge(edge: usize, diagram: &DCEL) -> Self {

@@ -16,7 +16,7 @@ pub fn line_raster_bbox(line: &Line) -> [pixel; 2] {
     let y_min = f64::min(line.points[0][1], line.points[1][1]);
     let y_max = f64::max(line.points[0][1], line.points[1][1]);
 
-    // min and max corners of bbox as pixels
+    // min and max values of bbox as pixels
     [
         nearest_pixel(&Point::new(x_min, x_max)),
         nearest_pixel(&Point::new(y_min, y_max)),
@@ -37,5 +37,13 @@ pub fn rasterize_line_naive(line: &Line, color: [f32; 3], canvas: &mut Canvas) {
     for x in i32::min(x1, x2)..i32::max(x1, x2) {
         y = y1 + dy * (x - x1) / dx;
         canvas.write_pixel(x as usize, y as usize, color);
+    }
+}
+
+pub fn rasterize_polygon_boundary(poly: &Ordered_Polygon, color: [f32; 3], canvas: &mut Canvas) {
+
+    let edges = poly.create_edges();
+    for edge in edges {
+        rasterize_line_naive(&edge, color, canvas)
     }
 }
