@@ -14,6 +14,8 @@ use seed::Seeds;
 extern crate voronoi;
 use voronoi::{make_line_segments, make_polygons, voronoi, Point};
 
+use crate::rasterize::scanline_rasterize_polygon;
+
 fn main() {
     const WIDTH: i32 = 240;
     const HEIGHT: i32 = 240;
@@ -33,21 +35,7 @@ fn main() {
             [10.0, 120.0],
         ],
     };
-    let bbox = polygon_raster_bbox(&poly);
-    let mut nodes;
-    let mut scanline;
-    for y in bbox[1][0]..bbox[1][1] {
-        //for y in y_min to y_max of polygon bbox
-        nodes = scanline_nodes(&poly, y as f64, WIDTH as f64);
-        if nodes.len() > 0 {
-            scanline = Line::from_nodes(&nodes);
-            rasterize_line_naive(&scanline, _WHITE, &mut canvas);
-            canvas.write_pixel(nodes[0][0] as usize, nodes[0][1] as usize, _RED);
-            canvas.write_pixel(nodes[1][0] as usize, nodes[1][1] as usize, _GREEN);
-        }
-    }
-
-    rasterize_circle(&Point::new(100.0, 100.0), 50, _BLUE, &mut canvas);
+    scanline_rasterize_polygon(&poly, _GREEN, &mut canvas);
 
     save_png("canvas.png", canvas);
 }
