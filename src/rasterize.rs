@@ -22,7 +22,7 @@ pub fn line_raster_bbox(line: &Line) -> [pixel; 2] {
         nearest_pixel(&Point::new(y_min, y_max)),
     ]
 }
-pub fn polygon_raster_bbox(poly: &Ordered_Polygon) -> [pixel; 2] {
+pub fn polygon_raster_bbox(poly: &Ordered_Polygon) -> [[i32; 2]; 2] {
     let edges = poly.create_edges();
     // let mut x_min = edges[0].points[0][0]; //arbitrarily choosing first edge point
     // let mut y_min = edges[0].points[1][0];
