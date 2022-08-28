@@ -4,30 +4,6 @@ Weighted voronoi point stippling in Rust
 
 
 # To Dos:
-## Geometry types
-- Point
-- Line
-- ~~Polygon (ordered)~~
-- Polygon (unordered)
-
-## Geomets
-- Line intersection
-- Vertex centroid (optional)
-- Create seed
-- Polygon edges
-- Sort vertices
-
-## Rasterizis
-- Scanline nodes
-- Raster BBox
-- Raster Scanline
-- Scanline rasterize polygon
-- Weighted raster centroid
-
-## Image
-Read pixel
-Write pixel to canvas
-Export as image
 
 | Data Structures | Status |
 | ----------- | :-----------: |
@@ -36,12 +12,23 @@ Export as image
 | Polygon (ordered) | ~~`Complete`~~|
 | Polygon (unordered) | `Incomplete`|
 
-| Data Structures | Status |
+| Geometry functions | Status |
 | ----------- | :-----------: |
 | Line intersection | `Incomplete`|
-| Create seed | `Incomplete`|
 | Polygon edges | `Incomplete`|
 | Sort vertices | `Incomplete`|
+
+| Rasterizing | Status |
+| ----------- | :-----------: |
+| Scanline nodes | `Incomplete` |
+| Raster BBox | `Incomplet` |
+| Raster Scanline | `Incomplet` |
+| Scanline rasterize polygon | `Incomplete` |
+| Weighted raster centroid | `Incomplete  ` |
+
+| Image | Status |
+| ----------- | :-----------: |
 | Read pixel | `Incomplete`|
+| Create seed | `Incomplete`|
 | Write pixel | `Incomplete`|
 | Export image | `Incomplete`|
