@@ -3,7 +3,7 @@ use rand::Rng;
 
 
 pub struct Seeds {
-    pub coords : Vec<(f32, f32)>
+    pub coords : Vec<(f64, f64)>
 }
 
 impl Seeds {
@@ -12,12 +12,12 @@ impl Seeds {
         let height = canvas.pixels.len();
         let mut seeds = Vec::new();
         let mut rng = rand::thread_rng();
-        let mut x: f32;
-        let mut y: f32;
+        let mut x: f64;
+        let mut y: f64;
         let mut n = 0;
         while n < count {
-            x = rng.gen_range(0..width) as f32;
-            y = rng.gen_range(0..height) as f32;
+            x = rng.gen_range(0..width) as f64;
+            y = rng.gen_range(0..height) as f64;
             seeds.push((x,y));
             n += 1
         }
