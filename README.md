@@ -5,24 +5,32 @@ Weighted voronoi point stippling in Rust
 
 # To Dos:
 ## Geometry types
-- [ ] Point
-- [ ] Line
+- [X] Point
+- [X] Pixel
+- [X] Line
 - [X] Polygon (ordered)
 - [ ] Polygon (unordered)
 
-## Geometry
-- [ ] Line intersection
-- [ ] Vertex centroid (optional)
-- [ ] Create seed
+## Geometry functions
+- [X] Voronoi diagram
+- [X] Line intersection
 - [ ] Polygon edges
 - [ ] Sort vertices
+- [ ] Vertex centroid (optional)
 
 ## Rasterizing
+- [ ] Raster Line
 - [ ] Scanline nodes
 - [ ] Raster BBox
 - [ ] Raster Scanline
 - [ ] Scanline rasterize polygon
 - [ ] Weighted raster centroid
+
+## Math
+- [x] Random numbers
+- [x] Random seeds (uniform)
+- [ ] Random seeds (rejection sampling)
+- [X] Nearest pixel
 
 ## Image
 - [ ] Read pixel
