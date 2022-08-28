@@ -1,6 +1,7 @@
 use crate::Canvas;
 use rand::Rng;
-
+// use rand::prelude::*;
+use rand::distributions::Uniform;
 
 pub struct Seeds {
     pub coords : Vec<(f64, f64)>
@@ -10,17 +11,13 @@ impl Seeds {
     pub fn uniform(canvas: &Canvas, count: usize) -> Self {
         let width = canvas.pixels[0].len();
         let height = canvas.pixels.len();
-        let mut seeds = Vec::new();
+
         let mut rng = rand::thread_rng();
-        let mut x: f64;
-        let mut y: f64;
-        let mut n = 0;
-        while n < count {
-            x = rng.gen_range(0..width) as f64;
-            y = rng.gen_range(0..height) as f64;
-            seeds.push((x,y));
-            n += 1
-        }
+        let range1 = Uniform::new(0., width as f64);
+        let range2 = Uniform::new(0., height as f64);
+        let seeds: Vec<(f64, f64)> = (0..count)
+        .map(|_| (rng.sample(&range1), rng.sample(&range2)))
+        .collect();
         Self {
             coords: seeds
         }
