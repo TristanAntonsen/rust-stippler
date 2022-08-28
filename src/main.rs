@@ -6,7 +6,7 @@ mod rasterize;
 use canvas::Canvas;
 use export::save_png;
 use geometry::{nearest_pixel, Line};
-use rasterize::line_raster_bbox;
+use rasterize::{line_raster_bbox, rasterize_line_naive};
 use seed::Seeds;
 extern crate voronator;
 use voronator::VoronoiDiagram;
@@ -15,6 +15,7 @@ use voronator::delaunator::Point;
 fn main() {
     const WIDTH: usize = 120;
     const HEIGHT: usize = 120;
+    const RED: [f32; 3] = [1.0, 0.0, 0.0];
     const WHITE: [f32; 3] = [1.0, 1.0, 1.0];
 
     let mut canvas = Canvas::new(WIDTH, HEIGHT);
@@ -30,8 +31,8 @@ fn main() {
         points: [(10.0, 10.0),(100.0, 100.0)]
     };
 
-    let line_bbox = line_raster_bbox(&line);
-    println!("Line bbox: {:?}", line_bbox);
+    rasterize_line_naive(&line, RED, &mut canvas);
+
     save_png("canvas.png", canvas);
 
 }
