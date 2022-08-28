@@ -10,6 +10,8 @@ impl Canvas {
         }
     }
     pub fn write_pixel(&mut self, x: usize, y: usize, color: color) {
-        self.pixels[x][y] = color
+        if x < self.pixels[0].len() && y < self.pixels.len(){
+            self.pixels[x][y] = color
+        }
     }
 }
