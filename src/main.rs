@@ -6,7 +6,9 @@ mod seed;
 use canvas::Canvas;
 use export::save_png;
 use geometry::{nearest_pixel, Line, Ordered_Polygon};
-use rasterize::{line_raster_bbox, rasterize_line_naive, rasterize_polygon_boundary};
+use rasterize::{
+    line_raster_bbox, rasterize_line_naive, rasterize_polygon_boundary, scanline_nodes,
+};
 use seed::Seeds;
 extern crate voronoi;
 use voronoi::{make_line_segments, make_polygons, voronoi, Point};
@@ -27,13 +29,17 @@ fn main() {
             [180.0, 20.0],
             [210.0, 210.0],
             [90.0, 220.0],
-            [10.0, 120.0]
-        ]
+            [10.0, 120.0],
+        ],
     };
 
     rasterize_polygon_boundary(&poly, _GREEN, &mut canvas);
 
-    // canvas.write_pixel(intersect_point[0] as usize, intersect_point[1] as usize, _RED);
-
+    let nodes = scanline_nodes(&poly, 100.0, WIDTH as f64);
+    let scanline = Line::from_nodes(&nodes);
+    rasterize_line_naive(&scanline, _WHITE, &mut canvas);
+    for node in &nodes {
+        canvas.write_pixel(node[0] as usize, node[1] as usize, _RED);
+    }
     save_png("canvas.png", canvas);
 }

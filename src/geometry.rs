@@ -10,7 +10,6 @@ pub struct Unordered_Polygon {
     pub vertices: Vec<[f32; 2]>,
 }
 
-
 pub struct Line {
     pub points: [point; 2],
 }
@@ -24,25 +23,18 @@ impl Ordered_Polygon {
     pub fn create_edges(&self) -> Vec<Line> {
         let n = self.vertices.len();
         let mut lines = Vec::new();
-        for i in 0..(n-1) {
+        for i in 0..(n - 1) {
             lines.push(Line {
-                points: [
-                    self.vertices[i],
-                    self.vertices[i + 1]
-                ]
+                points: [self.vertices[i], self.vertices[i + 1]],
             })
-        };
+        }
         lines.push(Line {
-            points: [
-                self.vertices[n - 1],
-                self.vertices[0]
-            ]
+            points: [self.vertices[n - 1], self.vertices[0]],
         });
 
         lines
     }
 }
-
 
 impl Line {
     pub fn from_halfedge(edge: usize, diagram: &DCEL) -> Self {
@@ -50,12 +42,22 @@ impl Line {
         let start = diagram.get_origin(edge);
         let end = diagram.get_origin(*twin);
         Self {
-            points: [[*start.x, *start.y],[*end.x, *end.y] ]
+            points: [[*start.x, *start.y], [*end.x, *end.y]],
         }
     }
-    pub fn from_segment(seg: [Point; 2]) -> Self {
+    pub fn from_segment(seg: &[Point; 2]) -> Self {
         Self {
-            points: [[*seg[0].x, *seg[0].y],[*seg[1].x, *seg[1].y]]
+            points: [[*seg[0].x, *seg[0].y], [*seg[1].x, *seg[1].y]],
+        }
+    }
+
+    pub fn from_nodes(nodes: &Vec<pixel>) -> Self {
+        //assumes exactly 2 nodes
+        Self {
+            points: [
+                [nodes[0][0] as f64, nodes[0][1] as f64],
+                [nodes[1][0] as f64, nodes[1][1] as f64],
+            ],
         }
     }
 
@@ -80,8 +82,7 @@ impl Line {
         let p_y = p_y_num / p_y_denom;
         let intersect_point = Point::new(p_x, p_y);
 
-        return nearest_pixel(&intersect_point)
-
+        return nearest_pixel(&intersect_point);
     }
 }
 

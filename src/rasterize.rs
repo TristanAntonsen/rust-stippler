@@ -47,3 +47,83 @@ pub fn rasterize_polygon_boundary(poly: &Ordered_Polygon, color: [f32; 3], canva
         rasterize_line_naive(&edge, color, canvas)
     }
 }
+
+pub fn scanline_nodes(poly: &Ordered_Polygon, scan_y: f64, width: f64) -> Vec<pixel> {
+
+    let mut nodes = Vec::new();
+    let mut p1y;
+    let mut p2y;
+    let mut p1x;
+    let mut p2x;
+    let mut scanline;
+    let mut line;
+    let mut node: pixel;
+    
+    for edge in poly.create_edges() {
+
+        p1y = edge.points[0][1];
+        p2y = edge.points[1][1];
+
+        // If line crosses scanline
+        if p1y < scan_y && p2y >= scan_y || p1y >= scan_y && p2y < scan_y{
+            p1x = edge.points[0][0];
+            p2x = edge.points[1][0];
+
+            if p1x < 0.0 {
+                p1x = 0.0
+            }
+            scanline = Line {
+                points: [
+                    [p1x,p1y],
+                    [p2x,p2y]
+                ]
+            };
+            line = Line {
+                points: [
+                    [0.0,scan_y],
+                    [width, scan_y]
+                ]
+            };
+
+            node = scanline.line_intersection(&line);
+            node[0] += 1; // accounts for line shifting left
+            nodes.push(node)
+        }
+    }
+
+    nodes
+
+    // nodes
+}
+
+// def Scanline_nodes(polygon,scan_y, image_res):
+
+//     polygon_edges = Edges(polygon)
+//     nodes = []
+//     for edge in polygon_edges:
+//         edge = list(edge)
+//         p1y = edge[0][1]
+//         p2y = edge[1][1]
+
+//         ## If line crosses scanline
+//         if p1y < scan_y and p2y >= scan_y or p1y >= scan_y and p2y < scan_y:
+//             p1x = edge[0][0]
+//             p2x = edge[1][0]
+
+//             if p1x < 0:
+//                 p1x = 0
+//             if p1x >= image_res:
+//                 p1x = image_res - 1
+
+//             p1 = [p1x,p1y]
+//             p2 = [p2x,p2y]
+//             p3 = [0,scan_y]
+//             p4 = [image_res,scan_y]
+//             node = Line_Intersection(p1,p2,p3,p4)
+//             node = [Clamp(node[0],[0,image_res]),Clamp(node[1],[0,image_res])]
+//             nodes.append(node)
+
+//     if len(nodes) < 1:
+//         return False
+//     else:
+//         return nodes
