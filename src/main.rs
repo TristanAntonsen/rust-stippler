@@ -3,7 +3,8 @@ mod canvas;
 mod geometry;
 use canvas::Canvas;
 use export::save_png;
-use geometry::Ordered_Polygon;
+use geometry::{Ordered_Polygon, point, Line};
+
 fn main() {
 
     let mut canvas = Canvas::new(120, 120);
@@ -21,4 +22,7 @@ fn main() {
     }
     save_png("canvas.png", canvas);
 
+    let point: point = [0.0,5.0];
+
+    println!("{:?}",point);    
 }
