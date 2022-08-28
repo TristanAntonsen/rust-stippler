@@ -1,5 +1,7 @@
 use crate::geometry::{nearest_pixel, pixel, point, Line};
 use crate::Canvas;
+use voronoi::Point;
+
 pub fn line_raster_bbox(line: &Line) -> [pixel; 2] {
     let x_min = f64::min(line.points[0][0], line.points[1][0]);
     let x_max = f64::max(line.points[0][0], line.points[1][0]);
@@ -8,8 +10,8 @@ pub fn line_raster_bbox(line: &Line) -> [pixel; 2] {
     
     // min and max corners of bbox as pixels
     [
-        nearest_pixel(&[x_min, x_max]),
-        nearest_pixel(&[y_min, y_max]),
+        nearest_pixel(&Point::new(x_min, x_max)),
+        nearest_pixel(&Point::new(y_min, y_max)),
     ]
 }
 pub fn rasterize_line_naive(line: &Line, color: [f32; 3], canvas: &mut Canvas) {

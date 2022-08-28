@@ -26,6 +26,8 @@ fn main() {
         canvas.write_pixel(pixel[0], pixel[1], WHITE);
         // println!("{:?}",s)
     }
+    let box_size: f64 = 500.0;
+    let vor_diagram = voronoi(seeds.coords, box_size);
 
     save_png("canvas.png", canvas);
 
