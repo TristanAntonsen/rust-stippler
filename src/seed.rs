@@ -4,7 +4,7 @@ use rand::Rng;
 use rand::distributions::Uniform;
 
 pub struct Seeds {
-    pub coords : Vec<(f64, f64)>
+    pub coords : Vec<[f64; 2]>
 }
 
 impl Seeds {
@@ -15,8 +15,8 @@ impl Seeds {
         let mut rng = rand::thread_rng();
         let range1 = Uniform::new(0., width as f64);
         let range2 = Uniform::new(0., height as f64);
-        let seeds: Vec<(f64, f64)> = (0..count)
-        .map(|_| (rng.sample(&range1), rng.sample(&range2)))
+        let seeds: Vec<[f64; 2]> = (0..count)
+        .map(|_| [rng.sample(&range1), rng.sample(&range2)])
         .collect();
         Self {
             coords: seeds
