@@ -1,6 +1,14 @@
-use crate::geometry::{nearest_pixel, pixel, point, Line};
+use crate::geometry::{nearest_pixel, pixel, point, Ordered_Polygon, Line};
 use crate::Canvas;
 use voronoi::Point;
+
+pub const _TEST_LINE: Line =  Line {
+    points: [
+        [200.0, 10.0],
+        [40.0, 200.0],
+    ]
+};
+
 
 pub fn line_raster_bbox(line: &Line) -> [pixel; 2] {
     let x_min = f64::min(line.points[0][0], line.points[1][0]);
