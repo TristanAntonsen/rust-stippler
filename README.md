@@ -1,34 +1,30 @@
-# rust-stippler
+# rust- [ ]stippler
 Weighted voronoi point stippling in Rust
-[Reference - *Weighted Voronoi Point Stippling*](https://www.cs.ubc.ca/labs/imager/tr/2002/secord2002b/secord.2002b.pdf)
+- [Reference - [ ] *Weighted Voronoi Point Stippling*](https://www.cs.ubc.ca/labs/imager/tr/2002/secord2002b/secord.2002b.pdf)
 
 
 # To Dos:
+## Geometry types
+- [ ] Point
+- [ ] Line
+- [X] Polygon (ordered)
+- [ ] Polygon (unordered)
 
-| Data Structures | Status |
-| ----------- | :-----------: |
-| Point | `Incomplete`|
-| Line | `Incomplete`|
-| Polygon (ordered) | ~~`Complete`~~|
-| Polygon (unordered) | `Incomplete`|
+## Geometry
+- [ ] Line intersection
+- [ ] Vertex centroid (optional)
+- [ ] Create seed
+- [ ] Polygon edges
+- [ ] Sort vertices
 
-| Geometry functions | Status |
-| ----------- | :-----------: |
-| Line intersection | `Incomplete`|
-| Polygon edges | `Incomplete`|
-| Sort vertices | `Incomplete`|
+## Rasterizing
+- [ ] Scanline nodes
+- [ ] Raster BBox
+- [ ] Raster Scanline
+- [ ] Scanline rasterize polygon
+- [ ] Weighted raster centroid
 
-| Rasterizing | Status |
-| ----------- | :-----------: |
-| Scanline nodes | `Incomplete` |
-| Raster BBox | `Incomplet` |
-| Raster Scanline | `Incomplet` |
-| Scanline rasterize polygon | `Incomplete` |
-| Weighted raster centroid | `Incomplete  ` |
-
-| Image | Status |
-| ----------- | :-----------: |
-| Read pixel | `Incomplete`|
-| Create seed | `Incomplete`|
-| Write pixel | `Incomplete`|
-| Export image | `Incomplete`|
+## Image
+- [ ] Read pixel
+- [X] Write pixel to canvas
+- [X] Export as image
