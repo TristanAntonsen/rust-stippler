@@ -9,7 +9,7 @@ pub struct Ordered_Polygon {
 }
 
 pub struct Unordered_Polygon {
-    pub vertices: Vec<[f32; 2]>,
+    pub vertices: Vec<[f64; 2]>,
 }
 
 pub struct Line {
@@ -29,6 +29,21 @@ pub fn distance(a: &pixel, b: &pixel) -> f64 {
     (_x + _y).sqrt()
 }
 
+pub fn vertex_centroid(points: &Vec<[f64; 2]>) -> [f64; 2] {
+    let mut x = 0.0;
+    let mut y = 0.0;
+    let n = points.len();
+    for point in points {
+        x += point[0];
+        y += point[1];
+    }
+    
+    x /= n as f64;
+    y /= n as f64;
+
+    [x, y]
+}
+
 impl Ordered_Polygon {
     pub fn create_edges(&self) -> Vec<Line> {
         let n = self.vertices.len();
@@ -45,6 +60,40 @@ impl Ordered_Polygon {
         lines
     }
 }
+
+// impl Unordered_Polygon {
+//     pub fn sort(&self) -> Ordered_Polygon {
+//         let angles = Vec::new();
+//         let centroid = 
+//     }
+// }
+
+// def Sort_Vertices(polygon):
+//     angles = []
+//     centroid = Calculate_Centroid(polygon)
+//     # vA = x vector starting at centroid
+//     vA = np.array([centroid[0] + 300,centroid[1],0])
+//     s = 5
+//     for vert in polygon:
+//         x = vert[0]
+//         y = vert[1]
+//         #vB = vector between centroid and vertex
+//         vB = np.array([x - centroid[0], y - centroid[1],0])
+        
+//         numerator = np.dot(vA,vB)
+//         denominator = np.linalg.norm(vA) * np.linalg.norm(vB)
+//         theta = np.arccos(numerator / denominator)
+
+//         sign = np.cross(vA,vB) / np.linalg.norm(np.cross(vA,vB))
+//         theta *= sign[2]
+
+//         angles.append(theta)
+
+
+//     sorted_verts = np.array([x for _, x in sorted(zip(angles, polygon))])
+
+//     return sorted_verts
+
 
 impl Line {
     pub fn from_halfedge(edge: usize, diagram: &DCEL) -> Self {
