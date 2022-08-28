@@ -43,9 +43,8 @@ fn main() {
         if nodes.len() > 0 {
             scanline = Line::from_nodes(&nodes);
             rasterize_line_naive(&scanline, _WHITE, &mut canvas);
-            for node in &nodes {
-                canvas.write_pixel(node[0] as usize, node[1] as usize, _RED);
-            }
+            canvas.write_pixel(nodes[0][0] as usize, nodes[0][1] as usize, _RED);
+            canvas.write_pixel(nodes[1][0] as usize, nodes[1][1] as usize, _GREEN);
         }
     }
 
