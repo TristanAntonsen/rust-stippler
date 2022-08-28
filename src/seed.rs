@@ -3,7 +3,7 @@ use rand::Rng;
 
 
 pub struct Seeds {
-    pub coords : Vec<[f32; 2]>
+    pub coords : Vec<(f32, f32)>
 }
 
 impl Seeds {
@@ -18,11 +18,12 @@ impl Seeds {
         while n < count {
             x = rng.gen_range(0..width) as f32;
             y = rng.gen_range(0..height) as f32;
-            seeds.push([x,y]);
+            seeds.push((x,y));
             n += 1
         }
         Self {
             coords: seeds
         }
     }
+
 }
