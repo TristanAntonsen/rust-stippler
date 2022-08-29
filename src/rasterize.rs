@@ -1,10 +1,55 @@
 use crate::geometry::{distance, nearest_pixel, pixel, point, Line, Ordered_Polygon};
-use crate::Canvas;
+use crate::{Canvas, Weighted_Canvas};
 use voronoi::Point;
 
 pub const _TEST_LINE: Line = Line {
     points: [[200.0, 10.0], [40.0, 200.0]],
 };
+
+
+pub fn weighted_polygon_centroid(poly: &Ordered_Polygon, weights: &mut Weighted_Canvas) -> Option<Point>{
+    let width = weights.pixel_weights[0].len() as f64;
+    let bbox = polygon_raster_bbox(&poly);
+    let mut nodes;
+    let mut cx = 0.0;
+    let mut cy = 0.0;
+    let mut value;
+    let mut weight;
+    let mut total_weight = 0.0;
+    let mut pixel_count = 0;
+    for y in bbox[1][0]..bbox[1][1] {
+        nodes = scanline_nodes(&poly, y as f64, width);
+        if nodes.len() > 0 {
+            for x in nodes[0][0]..nodes[1][0] {
+                value = weights.read_pixel(x as usize, y as usize);
+                weight = 1.0 - value;
+                total_weight += weight;
+
+                cx += x as f32 * weight;
+                cy += y as f32 * weight;
+                
+                pixel_count += 1;
+
+            }
+            // calculate weights for pixels between nodes (including ends?)
+        }
+    }
+
+    if total_weight == 0.0 {
+        total_weight = pixel_count as f32;
+    }
+
+    cx /= total_weight;
+    cy /= total_weight;
+
+    if pixel_count == 0 {
+        return None
+    };
+    let centroid = Point::new(cx as f64, cy as f64);
+    
+    Some(centroid)
+
+}
 
 pub fn line_raster_bbox(line: &Line) -> [pixel; 2] {
     let x_min = f64::min(line.points[0][0], line.points[1][0]);
@@ -90,6 +135,7 @@ pub fn scanline_rasterize_polygon(poly: &Ordered_Polygon, color: [f32; 3], canva
     }
 }
 
+
 pub fn scanline_nodes(poly: &Ordered_Polygon, scan_y: f64, width: f64) -> Vec<pixel> {
     let mut nodes = Vec::new();
     let mut p1y;
@@ -126,9 +172,7 @@ pub fn scanline_nodes(poly: &Ordered_Polygon, scan_y: f64, width: f64) -> Vec<pi
     }
     if nodes.len() > 0 {
         if nodes[0][1] != nodes[1][1] {
-            println!("Different y: {:?}",nodes)
         }
-        println!("No nodes")
     }
     nodes
 }
