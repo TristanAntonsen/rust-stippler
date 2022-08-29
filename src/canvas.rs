@@ -1,3 +1,4 @@
+use rand::Rng;
 pub type color = [f32; 3];
 pub struct Canvas {
     pub pixels: Vec<Vec<color>>,
@@ -14,4 +15,13 @@ impl Canvas {
             self.pixels[x][y] = color
         }
     }
+}
+
+pub fn random_color() -> color {
+    let mut rng = rand::thread_rng();
+    let r: f32 = rng.gen();
+    let g: f32 = rng.gen();
+    let b: f32 = rng.gen();
+
+    [r,g,b]
 }

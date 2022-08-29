@@ -132,7 +132,6 @@ pub fn rasterize_circle(point: &Point, radius: i32, color: [f32; 3], canvas: &mu
 
     for _x in (x - radius)..(x + radius) {
         for _y in (y - radius)..(y + radius) {
-            println!("({},{})",_x,_y);
             d = distance(&[x,y], &[_x,_y]);
             if d < radius as f64 {
                 canvas.write_pixel(_x as usize, _y as usize, color);
