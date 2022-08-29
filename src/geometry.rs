@@ -1,7 +1,8 @@
+use nalgebra::Matrix1x3;
+use core::num;
 use std::ops::Sub;
-
 use voronoi::{Point, DCEL};
-
+use radsort;
 pub type point = [f64; 2];
 pub type pixel = [i32; 2];
 pub struct Ordered_Polygon {
@@ -22,7 +23,6 @@ pub fn nearest_pixel(point: &Point) -> pixel {
 }
 
 pub fn distance(a: &pixel, b: &pixel) -> f64 {
-
     let _x = (b[0] - a[0]).pow(2) as f64;
     let _y = (b[1] - a[1]).pow(2) as f64;
 
@@ -37,7 +37,7 @@ pub fn vertex_centroid(points: &Vec<[f64; 2]>) -> [f64; 2] {
         x += point[0];
         y += point[1];
     }
-    
+
     x /= n as f64;
     y /= n as f64;
 
@@ -61,39 +61,67 @@ impl Ordered_Polygon {
     }
 }
 
-// impl Unordered_Polygon {
-//     pub fn sort(&self) -> Ordered_Polygon {
-//         let angles = Vec::new();
-//         let centroid = 
-//     }
-// }
+impl Unordered_Polygon {
+    pub fn sort(&mut self) -> Ordered_Polygon {
+        let mut sorted = Vec::new();
+        let centroid = vertex_centroid(&self.vertices);
+        let mut x;
+        let mut y;
+        let mut v_b;
+        let mut numerator;
+        let mut denominator;
+        let mut theta;
+        let mut _s;
+        let mut sign;
+        // let sorted_verts;
+
+        let v_a = Matrix1x3::new(centroid[0] + 300.0, centroid[1], 0.0);
+        for vert in &self.vertices {
+            x = vert[0];
+            y = vert[1];
+            v_b = Matrix1x3::new(x - centroid[0], y - centroid[1], 0.0);
+
+            numerator = v_a.dot(&v_b);
+            denominator = v_a.magnitude() * v_b.magnitude();
+
+            theta = (numerator / denominator).acos();
+            _s = v_a.cross(&v_b);
+            sign = _s / _s.magnitude();
+            theta *= sign[2];
+            sorted.push((vert, theta));
+        }
+        // let mut sorted = self.vertices.clone();
+        radsort::sort_by_key(&mut sorted, |k| k.1);
+        let verts = sorted.iter().map(|x| *x.0).collect::<Vec<[f64; 2]>>();
+
+        Ordered_Polygon { vertices: verts }
+    }
+}
 
 // def Sort_Vertices(polygon):
 //     angles = []
 //     centroid = Calculate_Centroid(polygon)
-//     # vA = x vector starting at centroid
-//     vA = np.array([centroid[0] + 300,centroid[1],0])
+//     # v_a = x vector starting at centroid
+//     v_a = np.array([centroid[0] + 300,centroid[1],0])
 //     s = 5
 //     for vert in polygon:
 //         x = vert[0]
 //         y = vert[1]
-//         #vB = vector between centroid and vertex
-//         vB = np.array([x - centroid[0], y - centroid[1],0])
-        
-//         numerator = np.dot(vA,vB)
-//         denominator = np.linalg.norm(vA) * np.linalg.norm(vB)
+//         #v_b = vector between centroid and vertex
+//         v_b = np.array([x - centroid[0], y - centroid[1],0])
+
+//         numerator = np.dot(v_a,v_b)
+//         denominator = np.linalg.norm(v_a) * np.linalg.norm(v_b)
 //         theta = np.arccos(numerator / denominator)
 
-//         sign = np.cross(vA,vB) / np.linalg.norm(np.cross(vA,vB))
+//         sign = np.cross(v_a,v_b) / np.linalg.norm(np.cross(v_a,v_b))
 //         theta *= sign[2]
 
 //         angles.append(theta)
 
-
 //     sorted_verts = np.array([x for _, x in sorted(zip(angles, polygon))])
 
 //     return sorted_verts
-
 
 impl Line {
     pub fn from_halfedge(edge: usize, diagram: &DCEL) -> Self {
