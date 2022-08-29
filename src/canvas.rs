@@ -46,7 +46,7 @@ impl Canvas {
 
         for x in 0..w {
             for y in 0..h {
-                weights[y][x] = color_average(&self.pixels[x][y]);
+                weights[x][y] = color_average(&self.pixels[x][y]);
             }
         }
 
