@@ -3,7 +3,7 @@ mod export;
 mod geometry;
 mod rasterize;
 mod seed;
-use canvas::{Canvas, random_color};
+use canvas::{random_color, Canvas};
 use export::save_png;
 use geometry::{nearest_pixel, vertex_centroid, Line, Ordered_Polygon, Unordered_Polygon};
 use rasterize::{
@@ -26,25 +26,20 @@ fn main() {
 
     let mut canvas = Canvas::new(WIDTH as usize, HEIGHT as usize);
 
-    // let mut seeds = Seeds::uniform(&canvas, 100);
+    let mut seeds = Seeds::uniform(&canvas, 20);
 
-    // let vor_diagram = voronoi(seeds.coords, WIDTH as f64);
+    let vor_diagram = voronoi(seeds.coords, WIDTH as f64);
 
-    let mut poly = Unordered_Polygon {
-        vertices: vec![
-            [40.0, 10.0],
-            [210.0, 210.0],
-            [180.0, 20.0],
-            [90.0, 220.0],
-            [10.0, 120.0],
-        ],
-    };
-    let sorted_poly = poly.sort();
+    let faces = voronoi::make_polygons(&vor_diagram);
+    for face in &faces {
+        let mut test_poly = Unordered_Polygon::from_face(face);
+        let sorted_poly = test_poly.sort();
 
-    let _c = vertex_centroid(&sorted_poly.vertices);
-    let c = Point::new(_c[0], _c[1]);
-    let color = random_color();
-    scanline_rasterize_polygon(&sorted_poly, color, &mut canvas);
-    rasterize_circle(&c, 5, _RED, &mut canvas);
+        let _c = vertex_centroid(&sorted_poly.vertices);
+        let c = Point::new(_c[0], _c[1]);
+        let color = random_color();
+        scanline_rasterize_polygon(&sorted_poly, color, &mut canvas);
+        // rasterize_circle(&c, 5, _RED, &mut canvas);
+    }
     save_png("canvas.png", canvas);
 }
