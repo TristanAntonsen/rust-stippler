@@ -3,7 +3,7 @@ mod export;
 mod geometry;
 mod rasterize;
 mod seed;
-use canvas::{random_color, Canvas, random_grayscale};
+use canvas::{random_color, Canvas, Weighted_Canvas, random_grayscale};
 use export::save_png;
 use geometry::{vertex_centroid, Line, Ordered_Polygon, Unordered_Polygon};
 use rasterize::{ rasterize_circle, scanline_rasterize_polygon
@@ -52,8 +52,7 @@ fn main() {
     }
 
     let gray = canvas.to_grayscale();
-    println!("Grayscale: {:?}", gray.pixel_weights[0].len());
-    println!("Color: {:?}", canvas.pixels[0].len());
-
+    println!("Weight: {:?}", gray.read_pixel(100, 10));
+    export::save_grayscale_png("grayscale_canvas.png", gray);
     save_png("canvas.png", canvas);
 }

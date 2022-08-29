@@ -1,10 +1,22 @@
 use rand::Rng;
+
+use crate::geometry::pixel;
 pub type color = [f32; 3];
 pub struct Canvas {
     pub pixels: Vec<Vec<color>>,
 }
-pub struct Weighted_Canvas {
+pub struct Weighted_Canvas { //grayscale
     pub pixel_weights: Vec<Vec<f32>>,
+}
+
+impl Weighted_Canvas {
+    pub fn read_pixel(&self, x: usize, y: usize) -> f32 {
+        if x < self.pixel_weights[0].len() && y < self.pixel_weights.len() {
+            return self.pixel_weights[x][y];
+        } else {
+            return 0.0; //return black
+        }
+    }
 }
 
 impl Canvas {
@@ -27,7 +39,6 @@ impl Canvas {
         }
     }
     pub fn to_grayscale(&mut self) -> Weighted_Canvas {
-        let mut weights: Vec<Vec<f32>> = Vec::new();
         let w = self.pixels[0].len();
         let h = self.pixels.len();
 
@@ -35,7 +46,7 @@ impl Canvas {
 
         for x in 0..w {
             for y in 0..h {
-                weights[y][x] = 1.0;
+                weights[y][x] = color_average(&self.pixels[x][y]);
             }
         }
 
@@ -59,4 +70,10 @@ pub fn random_grayscale() -> color {
     let g: f32 = rng.gen();
 
     [g, g, g]
+}
+
+pub fn color_average(color: &color) -> f32 {
+
+    (color[0] + color[1] + color[2]) as f32 / 3.0
+
 }

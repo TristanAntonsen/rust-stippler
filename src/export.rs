@@ -1,5 +1,5 @@
 use std::fs;
-use crate::Canvas;
+use crate::{Canvas, Weighted_Canvas};
 extern crate image;
 use image::{ImageBuffer, Rgb, RgbImage};
 
@@ -21,6 +21,25 @@ pub fn save_png(path: &str, canvas: Canvas) {
             b = (color[2] * 255.0).round() as u8;
             
             img.put_pixel(x, y, Rgb([r,g,b]));            
+        }
+    }
+    println!("{} exported.", path);
+    
+    img.save(path).expect("Could not save png");
+}
+pub fn save_grayscale_png(path: &str, canvas: Weighted_Canvas) { // rework with generics/traits later
+    let width = canvas.pixel_weights.len() as u32;
+    let height = canvas.pixel_weights[0].len() as u32;
+
+    let mut img = RgbImage::new(width, height);
+    let mut g;
+    let mut value: f32;
+    for x in 0..width {
+        for y in 0..height {
+            value = canvas.pixel_weights[x as usize][y as usize];
+            g = (value * 255.0).round() as u8;
+            
+            img.put_pixel(x, y, Rgb([g,g,g])); //just using RGB with equal r/g/b values        
         }
     }
     println!("{} exported.", path);
