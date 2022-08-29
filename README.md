@@ -9,7 +9,7 @@ Weighted voronoi point stippling in Rust
 - [X] Pixel
 - [X] Line
 - [X] Polygon (ordered)
-- [ ] Polygon (unordered)
+- [X] Polygon (unordered)
 
 ## Geometry functions
 - [X] Voronoi diagram
@@ -19,11 +19,11 @@ Weighted voronoi point stippling in Rust
 - [ ] Vertex centroid (optional)
 
 ## Rasterizing
-- [ ] Raster Line
-- [ ] Scanline nodes
-- [ ] Raster BBox
-- [ ] Raster Scanline
-- [ ] Scanline rasterize polygon
+- [X] Raster Line
+- [X] Scanline nodes
+- [X] Raster BBox
+- [X] Raster Scanline
+- [X] Scanline rasterize polygon
 - [ ] Weighted raster centroid
 
 ## Math
