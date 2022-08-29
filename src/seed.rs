@@ -4,6 +4,7 @@ use rand::Rng;
 use rand::distributions::Uniform;
 use voronoi::Point;
 
+#[derive(Debug, Clone)]
 pub struct Seeds {
     pub coords : Vec<Point>
 }

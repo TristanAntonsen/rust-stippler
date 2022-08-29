@@ -25,3 +25,10 @@ pub fn random_color() -> color {
 
     [r,g,b]
 }
+
+pub fn random_grayscale() -> color {
+    let mut rng = rand::thread_rng();
+    let g: f32 = rng.gen();
+
+    [g,g,g]
+}
