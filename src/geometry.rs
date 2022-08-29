@@ -18,7 +18,7 @@ pub struct Line {
 
 //return the nearest pixel as the floor of each floating point coordinate
 pub fn nearest_pixel(point: &Point) -> pixel {
-    [point.x.floor() as i32, point.y.floor() as i32]
+    [point.x.round() as i32, point.y.round() as i32]
 }
 
 pub fn distance(a: &pixel, b: &pixel) -> f64 {

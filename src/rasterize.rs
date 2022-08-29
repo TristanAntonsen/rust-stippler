@@ -78,12 +78,14 @@ pub fn scanline_rasterize_polygon(poly: &Ordered_Polygon, color: [f32; 3], canva
     let bbox = polygon_raster_bbox(&poly);
     let mut nodes;
     let mut scanline;
+    // println!("bbox: {},{}",bbox[1][0],bbox[1][1]);
     for y in bbox[1][0]..bbox[1][1] {
         //for y in y_min to y_max of polygon bbox
         nodes = scanline_nodes(&poly, y as f64, width);
         if nodes.len() > 0 {
             scanline = Line::from_nodes(&nodes);
             rasterize_line_naive(&scanline, color, canvas);
+            // println!("nodes: {:?}",nodes)
         }
     }
 }
@@ -121,6 +123,12 @@ pub fn scanline_nodes(poly: &Ordered_Polygon, scan_y: f64, width: f64) -> Vec<pi
             node[0] += 1; // accounts for line shifting left
             nodes.push(node)
         }
+    }
+    if nodes.len() > 0 {
+        if nodes[0][1] != nodes[1][1] {
+            println!("Different y: {:?}",nodes)
+        }
+        println!("No nodes")
     }
     nodes
 }

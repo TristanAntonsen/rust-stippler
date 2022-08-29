@@ -31,15 +31,30 @@ fn main() {
     let vor_diagram = voronoi(seeds.coords, WIDTH as f64);
 
     let faces = voronoi::make_polygons(&vor_diagram);
+    let mut poly;
+    let mut sorted_poly;
+    let mut _c;
+    let mut c;
+    let mut color;
     for face in &faces {
-        let mut test_poly = Unordered_Polygon::from_face(face);
-        let sorted_poly = test_poly.sort();
+        poly = Unordered_Polygon::from_face(face);
+        sorted_poly = poly.sort();
 
-        let _c = vertex_centroid(&sorted_poly.vertices);
-        let c = Point::new(_c[0], _c[1]);
-        let color = random_color();
-        scanline_rasterize_polygon(&sorted_poly, color, &mut canvas);
+        _c = vertex_centroid(&sorted_poly.vertices);
+        c = Point::new(_c[0], _c[1]);
+        color = random_color();
+        scanline_rasterize_polygon(&sorted_poly,color, &mut canvas);
+        //Skips lines -- is it the floor() function?
+        //somehow the ys are duplicating/lagging
         // rasterize_circle(&c, 5, _RED, &mut canvas);
     }
+    // let face = &faces[10];
+    // poly = Unordered_Polygon::from_face(face);
+    // sorted_poly = poly.sort();
+
+    // _c = vertex_centroid(&sorted_poly.vertices);
+    // c = Point::new(_c[0], _c[1]);
+    // color = random_color();
+    // scanline_rasterize_polygon(&sorted_poly,_RED, &mut canvas);
     save_png("canvas.png", canvas);
 }
