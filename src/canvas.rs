@@ -3,6 +3,9 @@ pub type color = [f32; 3];
 pub struct Canvas {
     pub pixels: Vec<Vec<color>>,
 }
+pub struct Weighted_Canvas {
+    pub pixel_weights: Vec<f32>
+}
 
 impl Canvas {
     pub fn new(width: usize, height: usize) -> Self {
@@ -15,6 +18,15 @@ impl Canvas {
             self.pixels[x][y] = color
         }
     }
+
+    pub fn read_pixel(&self, x: usize, y: usize) -> color {
+        if x < self.pixels[0].len() && y < self.pixels.len(){
+            return self.pixels[x][y]
+        } else {
+            return [0.0,0.0,0.0] //return black
+        }
+    }
+
 }
 
 pub fn random_color() -> color {
