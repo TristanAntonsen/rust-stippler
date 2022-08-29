@@ -51,9 +51,9 @@ fn main() {
         rasterize_circle(point, 2, _BLACK, &mut canvas)
     }
 
-    let test_color = canvas.read_pixel(100, 100);
-
-    println!("Read color value: {:?}",test_color);
+    let gray = canvas.to_grayscale();
+    println!("Grayscale: {:?}", gray.pixel_weights[0].len());
+    println!("Color: {:?}", canvas.pixels[0].len());
 
     save_png("canvas.png", canvas);
 }
