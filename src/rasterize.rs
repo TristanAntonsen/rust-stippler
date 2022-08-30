@@ -47,7 +47,6 @@ pub fn weighted_polygon_centroid(poly: &Ordered_Polygon, weights: &mut Weighted_
         return Point::new(0.,0.)
     };
     let centroid = Point::new(cx as f64, cy as f64);
-    println!("centroid: {:?}",centroid);
     centroid
 }
 

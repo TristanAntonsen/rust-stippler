@@ -1,4 +1,6 @@
 use rand::Rng;
+use image::{ImageBuffer, Rgb, RgbImage, GenericImageView};
+use image::io::Reader as ImageReader;
 
 use crate::geometry::pixel;
 pub type color = [f32; 3];
@@ -15,6 +17,26 @@ impl Weighted_Canvas {
             return self.pixel_weights[x][y];
         } else {
             return 0.0; //return black
+        }
+    }
+
+    pub fn from_image(path: &str) -> Self {
+        let img = ImageReader::open("lena.png").expect("Error.").decode().expect("Error.");
+        let width = img.width() as usize;
+        let height = img.height() as usize;
+        let (mut r, mut g, mut b);
+        let (mut x, mut y);
+        let mut pixels = vec![vec![0.0; width]; height];
+        for pixel in img.pixels() {
+            r = pixel.2[0] as f32;
+            g = pixel.2[1] as f32;
+            b = pixel.2[2] as f32;
+            x = pixel.0 as usize;
+            y = pixel.1 as usize;
+            pixels[x][y] = (r + g + b) / (3.0 * 255.0);
+        };
+        Self {
+            pixel_weights: pixels
         }
     }
 }

@@ -10,7 +10,8 @@ use rasterize::{ rasterize_circle, scanline_rasterize_polygon, weighted_polygon_
 use seed::Seeds;
 extern crate voronoi;
 use voronoi::{make_line_segments, make_polygons, voronoi, Point};
-
+use image::{ImageBuffer, Rgb, RgbImage, GenericImageView};
+use image::io::Reader as ImageReader;
 
 fn main() {
     const WIDTH: i32 = 500;
@@ -53,8 +54,14 @@ fn main() {
     for point in &start_seeds.coords {
         rasterize_circle(point, 2, _BLACK, &mut canvas)
     }
-    export::save_grayscale_png("grayscale_canvas.png", gray);
     save_png("canvas.png", canvas);
+    
+    // testing image loading
+    
+    let lena = Weighted_Canvas::from_image("lena.png");
+    println!("{:?}",lena.pixel_weights);
+    export::save_grayscale_png("grayscale_lena.png", lena);
+
 }
 
 
