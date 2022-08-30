@@ -7,9 +7,10 @@ pub const _TEST_LINE: Line = Line {
 };
 
 
-pub fn weighted_polygon_centroid(poly: &Ordered_Polygon, weights: &mut Weighted_Canvas) -> Option<Point>{
+pub fn weighted_polygon_centroid(poly: &Ordered_Polygon, weights: &mut Weighted_Canvas) -> Point {
     let width = weights.pixel_weights[0].len() as f64;
     let bbox = polygon_raster_bbox(&poly);
+
     let mut nodes;
     let mut cx = 0.0;
     let mut cy = 0.0;
@@ -20,7 +21,7 @@ pub fn weighted_polygon_centroid(poly: &Ordered_Polygon, weights: &mut Weighted_
     for y in bbox[1][0]..bbox[1][1] {
         nodes = scanline_nodes(&poly, y as f64, width);
         if nodes.len() > 0 {
-            for x in nodes[0][0]..nodes[1][0] {
+            for x in nodes[1][0]..nodes[0][0] { //from large to small, need to validate
                 value = weights.read_pixel(x as usize, y as usize);
                 weight = 1.0 - value;
                 total_weight += weight;
@@ -43,12 +44,11 @@ pub fn weighted_polygon_centroid(poly: &Ordered_Polygon, weights: &mut Weighted_
     cy /= total_weight;
 
     if pixel_count == 0 {
-        return None
+        return Point::new(0.,0.)
     };
     let centroid = Point::new(cx as f64, cy as f64);
-    
-    Some(centroid)
-
+    println!("centroid: {:?}",centroid);
+    centroid
 }
 
 pub fn line_raster_bbox(line: &Line) -> [pixel; 2] {
