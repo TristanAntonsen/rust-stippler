@@ -13,30 +13,29 @@ pub fn raster_centroid(poly: &Ordered_Polygon, canvas: &mut Canvas) -> Point {
     let mut cx = 0.0;
     let mut cy = 0.0;
     let mut pixel_count = 0.0;
-    println!("bbox: {:?}",bbox);
+    let (mut x1, mut x2, mut n_a, mut n_b);
     for y in bbox[1][0]..bbox[1][1] {
         nodes = scanline_nodes(&poly, y as f64, width);
-        // println!("{:?}",nodes); 
-        if nodes.len() > 0 {
-            // frome node_1 x to node_2 x
-            for x in nodes[0][0]..nodes[1][0] { //from large to small, need to validate
+        n_a = nodes[0][0];
+        n_b = nodes[1][0];
+        x1 = i32::min(n_a, n_b);
+        x2 = i32::max(n_a, n_b);
+        for x in x1..x2 {
+            // println!("({},{})",x,y);
+            cx += x as f32;
+            cy += y as f32;
 
-                cx += x as f32;
-                cy += y as f32;
-
-                pixel_count += 1.0;
-
-            }
+            pixel_count += 1.0;
         }
     }
-    
+
     if pixel_count == 0.0 {
-        return Point::new(0.,0.)
+        return Point::new(0., 0.);
     };
-    
+
     cx /= pixel_count;
     cy /= pixel_count;
-    
+
     let centroid = Point::new(cx as f64, cy as f64);
 
     centroid
@@ -56,16 +55,16 @@ pub fn weighted_polygon_centroid(poly: &Ordered_Polygon, weights: &mut Weighted_
     for y in bbox[1][0]..bbox[1][1] {
         nodes = scanline_nodes(&poly, y as f64, width);
         if nodes.len() > 0 {
-            for x in nodes[1][0]..nodes[0][0] { //from large to small, need to validate
+            for x in nodes[1][0]..nodes[0][0] {
+                //from large to small, need to validate
                 value = weights.read_pixel(x as usize, y as usize);
                 weight = 1.0 - value;
                 total_weight += weight;
 
                 cx += x as f32 * weight;
                 cy += y as f32 * weight;
-                
-                pixel_count += 1;
 
+                pixel_count += 1;
             }
             // calculate weights for pixels between nodes (including ends?)
         }
@@ -79,7 +78,7 @@ pub fn weighted_polygon_centroid(poly: &Ordered_Polygon, weights: &mut Weighted_
     cy /= total_weight;
 
     if pixel_count == 0 {
-        return Point::new(0.,0.)
+        return Point::new(0., 0.);
     };
     let centroid = Point::new(cx as f64, cy as f64);
     centroid
@@ -168,8 +167,7 @@ pub fn scanline_rasterize_polygon(poly: &Ordered_Polygon, color: [f32; 3], canva
         }
     }
 }
-
-
+// unordered nodes
 pub fn scanline_nodes(poly: &Ordered_Polygon, scan_y: f64, width: f64) -> Vec<pixel> {
     let mut nodes = Vec::new();
     let mut p1y;
@@ -205,8 +203,7 @@ pub fn scanline_nodes(poly: &Ordered_Polygon, scan_y: f64, width: f64) -> Vec<pi
         }
     }
     if nodes.len() > 0 {
-        if nodes[0][1] != nodes[1][1] {
-        }
+        if nodes[0][1] != nodes[1][1] {}
     }
     nodes
 }
@@ -218,7 +215,7 @@ pub fn rasterize_circle(point: &Point, radius: i32, color: [f32; 3], canvas: &mu
 
     for _x in (x - radius)..(x + radius) {
         for _y in (y - radius)..(y + radius) {
-            d = distance(&[x,y], &[_x,_y]);
+            d = distance(&[x, y], &[_x, _y]);
             if d < radius as f64 {
                 canvas.write_pixel(_x as usize, _y as usize, color);
             }

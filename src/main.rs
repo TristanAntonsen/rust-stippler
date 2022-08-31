@@ -74,17 +74,17 @@ fn main() {
     //     rasterize_circle(&point, 4, _GREEN, &mut canvas)
     // }
 
-    let hex = Ordered_Polygon::ngon([206., 300.], 200.0, 48);
+    let hex = Ordered_Polygon::ngon([206., 400.], 20.0, 6);
     scanline_rasterize_polygon(&hex, _GREEN, &mut canvas);
 
     let cV = vertex_centroid(&hex.vertices);
     let cR = raster_centroid(&hex, &mut canvas);
 
+    //visualizing polygon RASTER CENTROID in BLUE
+    rasterize_circle(&cR, 6, _BLUE, &mut canvas);
+
     //visualizing polygon VERTEX CENTROID in RED
     rasterize_circle(&Point::new(cV[0], cV[1]), 4, _RED, &mut canvas);
-
-    //visualizing polygon RASTER CENTROID in BLUE
-    rasterize_circle(&cR, 4, _BLUE, &mut canvas);
 
     save_png("canvas.png", canvas);
 }
