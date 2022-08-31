@@ -5,7 +5,42 @@ use voronoi::Point;
 pub const _TEST_LINE: Line = Line {
     points: [[200.0, 10.0], [40.0, 200.0]],
 };
+pub fn raster_centroid(poly: &Ordered_Polygon, canvas: &mut Canvas) -> Point {
+    let width = canvas.pixels[0].len() as f64;
+    let bbox = polygon_raster_bbox(&poly);
 
+    let mut nodes;
+    let mut cx = 0.0;
+    let mut cy = 0.0;
+    let mut pixel_count = 0.0;
+    println!("bbox: {:?}",bbox);
+    for y in bbox[1][0]..bbox[1][1] {
+        nodes = scanline_nodes(&poly, y as f64, width);
+        // println!("{:?}",nodes); 
+        if nodes.len() > 0 {
+            // frome node_1 x to node_2 x
+            for x in nodes[0][0]..nodes[1][0] { //from large to small, need to validate
+
+                cx += x as f32;
+                cy += y as f32;
+
+                pixel_count += 1.0;
+
+            }
+        }
+    }
+    
+    if pixel_count == 0.0 {
+        return Point::new(0.,0.)
+    };
+    
+    cx /= pixel_count;
+    cy /= pixel_count;
+    
+    let centroid = Point::new(cx as f64, cy as f64);
+
+    centroid
+}
 
 pub fn weighted_polygon_centroid(poly: &Ordered_Polygon, weights: &mut Weighted_Canvas) -> Point {
     let width = weights.pixel_weights[0].len() as f64;

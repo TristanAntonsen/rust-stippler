@@ -1,3 +1,5 @@
+use std::f32::consts::PI;
+
 use nalgebra::Matrix1x3;
 use voronoi::{Point, DCEL};
 use radsort;
@@ -57,6 +59,29 @@ impl Ordered_Polygon {
         });
 
         lines
+    }
+
+    pub fn ngon(center: [f64; 2], radius: f64, sides: u8) -> Self {
+
+        let mut vertices = Vec::new();
+        let mut temp_point;
+        let (mut x, mut y);
+        let mut theta: f64 = 0.0;
+        let inc = 2.0 * PI as f64 / sides as f64;
+
+
+        for t in 0..sides {
+            x = &radius * theta.cos();
+            y = &radius * theta.sin();
+            temp_point = [x + center[0], y + center[1]];
+            vertices.push(temp_point);
+            theta += inc;
+        };
+
+        Self {
+            vertices : vertices
+        }
+
     }
 }
 
