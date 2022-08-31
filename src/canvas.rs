@@ -39,6 +39,7 @@ impl Weighted_Canvas {
             pixel_weights: pixels
         }
     }
+    
 }
 
 impl Canvas {
