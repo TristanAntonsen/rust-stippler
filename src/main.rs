@@ -7,7 +7,7 @@ mod relax;
 use canvas::{random_color, Canvas, Weighted_Canvas, random_grayscale};
 use export::save_png;
 use geometry::{vertex_centroid, Line, Ordered_Polygon, Unordered_Polygon};
-use rasterize::{ rasterize_circle, scanline_rasterize_polygon, weighted_polygon_centroid};
+use rasterize::{ rasterize_circle, scanline_rasterize_polygon, weighted_raster_centroid};
 use seed::Seeds;
 extern crate voronoi;
 use voronoi::{make_line_segments, make_polygons, voronoi, Point};
@@ -45,7 +45,7 @@ fn main() {
     // let (mut _c, mut cV, mut cR, mut color);
 
     //creating weight array (grayscale)
-    let mut weights = Weighted_Canvas::from_image("white.png");
+    let mut weights = Weighted_Canvas::from_image("gradient.png");
 
     // //looping through voronoi regions
     // for face in &faces {
@@ -74,11 +74,11 @@ fn main() {
     //     rasterize_circle(&point, 4, _GREEN, &mut canvas)
     // }
 
-    let hex = Ordered_Polygon::ngon([206., 400.], 20.0, 6);
+    let hex = Ordered_Polygon::ngon([256., 257.], 200.0, 8);
     scanline_rasterize_polygon(&hex, _GREEN, &mut canvas);
-
     let cV = vertex_centroid(&hex.vertices);
-    let cR = raster_centroid(&hex, &mut canvas);
+    let cR = weighted_raster_centroid(&hex, &mut weights);
+    // let cR = raster_centroid(&hex, &mut canvas);
 
     //visualizing polygon RASTER CENTROID in BLUE
     rasterize_circle(&cR, 6, _BLUE, &mut canvas);

@@ -21,7 +21,7 @@ impl Weighted_Canvas {
     }
 
     pub fn from_image(path: &str) -> Self {
-        let img = ImageReader::open("lena.png").expect("Error.").decode().expect("Error.");
+        let img = ImageReader::open(path).expect("Error.").decode().expect("Error.");
         let width = img.width() as usize;
         let height = img.height() as usize;
         let (mut r, mut g, mut b);
@@ -34,6 +34,7 @@ impl Weighted_Canvas {
             x = pixel.0 as usize;
             y = pixel.1 as usize;
             pixels[x][y] = (r + g + b) / (3.0 * 255.0);
+            // println!("{:?}",(r + g + b) / (3.0 * 255.0))
         };
         Self {
             pixel_weights: pixels

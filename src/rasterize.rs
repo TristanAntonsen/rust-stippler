@@ -14,18 +14,20 @@ pub fn raster_centroid(poly: &Ordered_Polygon, canvas: &mut Canvas) -> Point {
     let mut cy = 0.0;
     let mut pixel_count = 0.0;
     let (mut x1, mut x2, mut n_a, mut n_b);
-    for y in bbox[1][0]..bbox[1][1] {
+    for y in bbox[1][0]..bbox[1][1] - 1 {
         nodes = scanline_nodes(&poly, y as f64, width);
-        n_a = nodes[0][0];
-        n_b = nodes[1][0];
-        x1 = i32::min(n_a, n_b);
-        x2 = i32::max(n_a, n_b);
-        for x in x1..x2 {
-            // println!("({},{})",x,y);
-            cx += x as f32;
-            cy += y as f32;
+        if nodes.len() > 0 {
+            n_a = nodes[0][0];
+            n_b = nodes[1][0];
+            x1 = i32::min(n_a, n_b);
+            x2 = i32::max(n_a, n_b);
+            for x in x1..x2 {
+                // println!("({},{})",x,y);
+                cx += x as f32;
+                cy += y as f32;
 
-            pixel_count += 1.0;
+                pixel_count += 1.0;
+            }
         }
     }
 
@@ -35,6 +37,47 @@ pub fn raster_centroid(poly: &Ordered_Polygon, canvas: &mut Canvas) -> Point {
 
     cx /= pixel_count;
     cy /= pixel_count;
+
+    let centroid = Point::new(cx as f64, cy as f64);
+
+    centroid
+}
+
+pub fn weighted_raster_centroid(poly: &Ordered_Polygon, weights: &mut Weighted_Canvas) -> Point {
+    let width = weights.pixel_weights[0].len() as f64;
+    let bbox = polygon_raster_bbox(&poly);
+
+    let mut nodes;
+    let mut cx = 0.0;
+    let mut cy = 0.0;
+    let mut pixel_count = 0.0;
+    let (mut x1, mut x2, mut n_a, mut n_b);
+    let mut weight;
+    let mut total_weight = 0.0;
+    for y in bbox[1][0]..bbox[1][1] - 1 {
+        nodes = scanline_nodes(&poly, y as f64, width);
+        if nodes.len() > 0 {
+            n_a = nodes[0][0];
+            n_b = nodes[1][0];
+            x1 = i32::min(n_a, n_b);
+            x2 = i32::max(n_a, n_b);
+            for x in x1..x2 {
+                weight = weights.read_pixel(x as usize, y as usize);
+                cx += weight * x as f32;
+                cy += weight * y as f32;
+
+                total_weight += weight;
+                pixel_count += 1.0;
+            }
+        };
+    }
+
+    if pixel_count == 0.0 {
+        return Point::new(0., 0.);
+    };
+
+    cx /= total_weight;
+    cy /= total_weight;
 
     let centroid = Point::new(cx as f64, cy as f64);
 
