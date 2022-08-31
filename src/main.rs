@@ -15,6 +15,7 @@ use image::{ImageBuffer, Rgb, RgbImage, GenericImageView};
 use image::io::Reader as ImageReader;
 
 use crate::rasterize::raster_centroid;
+use crate::relax::lloyd_relax;
 // use relax::lloyd_relax;
 
 const WIDTH: i32 = 512;
@@ -62,22 +63,21 @@ fn main() {
 
         //visualizing polygon region
         color = random_color();
-        scanline_rasterize_polygon(&sorted_poly,color, &mut canvas);
+        // scanline_rasterize_polygon(&sorted_poly,color, &mut canvas);
 
-        //visualizing polygon VERTEX CENTROID in RED
-        rasterize_circle(&cV, 4, _RED, &mut canvas);
-
-        //visualizing polygon RASTER CENTROID in BLUE
-        rasterize_circle(&cR, 7, _BLUE, &mut canvas);
-
-        //visualizing polygon WEIGHTED RASTER CENTROID in BLUE
-        rasterize_circle(&cW, 4, _WHITE, &mut canvas);
+        // //visualizing polygon WEIGHTED RASTER CENTROID in BLUE
+        // rasterize_circle(&cW, 4, _WHITE, &mut canvas);
     }
     //visualizing START SEEDS in GREEN
     for point in &start_seeds.coords {
         rasterize_circle(&point, 4, _GREEN, &mut canvas)
     }
 
+    let relaxed = lloyd_relax(&start_seeds, 2, WIDTH as f64, "canvas.png");
+    //visualizing RELAXED SEEDS in BLUE
+    for point in &relaxed {
+        rasterize_circle(&point, 4, _BLUE, &mut canvas)
+    }
     save_png("canvas.png", canvas);
 }
 
