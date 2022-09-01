@@ -32,11 +32,14 @@ fn main() {
     let mut canvas = Canvas::new(WIDTH as usize, HEIGHT as usize);
 
     //creating start seeds
-    let mut seeds = Seeds::uniform(&canvas, 20);
+    let mut seeds = Seeds::uniform(&canvas, 1000);
     let start_seeds = seeds.clone();
 
+    let relaxed = lloyd_relax(&start_seeds, 50, WIDTH as f64, "lena.png");
+
+
     //create voronoi diagram
-    let vor_diagram = voronoi(seeds.coords, WIDTH as f64);
+    let vor_diagram = voronoi(relaxed.clone(), WIDTH as f64);
 
     //faces of diagram
     let faces = voronoi::make_polygons(&vor_diagram);
@@ -69,14 +72,13 @@ fn main() {
         // rasterize_circle(&cW, 4, _WHITE, &mut canvas);
     }
     //visualizing START SEEDS in GREEN
-    for point in &start_seeds.coords {
-        rasterize_circle(&point, 4, _GREEN, &mut canvas)
-    }
+    // for point in &start_seeds.coords {
+    //     rasterize_circle(&point, 4, _GREEN, &mut canvas)
+    // }
 
-    let relaxed = lloyd_relax(&start_seeds, 2, WIDTH as f64, "canvas.png");
     //visualizing RELAXED SEEDS in BLUE
     for point in &relaxed {
-        rasterize_circle(&point, 4, _BLUE, &mut canvas)
+        rasterize_circle(&point, 2, _BLUE, &mut canvas)
     }
     save_png("canvas.png", canvas);
 }

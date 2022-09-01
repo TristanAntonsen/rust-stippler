@@ -72,10 +72,10 @@ pub fn weighted_raster_centroid(poly: &Ordered_Polygon, weights: &mut Weighted_C
         };
     }
 
-    if pixel_count == 0.0 {
+    if pixel_count == 0.0 || total_weight == 0.0 {
         return Point::new(0., 0.);
     };
-
+    // println!("total_weight: {}",total_weight);
     cx /= total_weight;
     cy /= total_weight;
 
