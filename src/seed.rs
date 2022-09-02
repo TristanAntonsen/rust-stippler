@@ -1,4 +1,4 @@
-use crate::Canvas;
+use crate::{Canvas,Weighted_Canvas};
 use rand::Rng;
 // use rand::prelude::*;
 use rand::distributions::Uniform;
@@ -24,5 +24,12 @@ impl Seeds {
             coords: seeds
         }
     }
+
+    // pub fn rejection_sample(weights: &Weighted_Canvas, count: usize, threshold: f64) -> Self {
+
+
+    //     let mut seed;
+
+    // }
 
 }

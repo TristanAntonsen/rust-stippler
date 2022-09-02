@@ -7,6 +7,7 @@ use voronoi::Point;
 pub const _TEST_LINE: Line = Line {
     points: [[200.0, 10.0], [40.0, 200.0]],
 };
+
 pub fn raster_centroid(poly: &Ordered_Polygon, canvas: &mut Canvas) -> Point {
     let width = canvas.pixels[0].len() as f64;
     let bbox = polygon_raster_bbox(&poly);

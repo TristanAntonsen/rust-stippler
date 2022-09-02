@@ -14,7 +14,7 @@ pub fn lloyd_relax(start_seeds: &Seeds,iterations: u16, width: f64, image_path: 
     let mut new_points;
     let mut faces;
     let mut vor_diagram;
-    // let mut file_name;
+    let mut file_name;
     for i in 0..iterations {
         //create voronoi diagram
         vor_diagram = voronoi(seeds.coords, width as f64);
@@ -38,14 +38,14 @@ pub fn lloyd_relax(start_seeds: &Seeds,iterations: u16, width: f64, image_path: 
         }
         seeds.coords = new_points;
 
-        // let mut canvas = Canvas::new(1080 as usize, 1080 as usize);
+        let mut canvas = Canvas::new(1080 as usize, 1080 as usize);
 
-        // for point in &seeds.coords {
-        //     rasterize_circle(&point, 2, [1.0, 1.0, 1.0], &mut canvas)
-        // }
-        // file_name = i.to_string();
-        // file_name.push_str(".png");
-        // save_png(&file_name[..], canvas);
+        for point in &seeds.coords {
+            rasterize_circle(&point, 2, [1.0, 1.0, 1.0], &mut canvas)
+        }
+        file_name = i.to_string();
+        file_name.push_str(".png");
+        save_png(&file_name[..], canvas);
     }
 
     seeds.coords
