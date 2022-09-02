@@ -50,7 +50,6 @@ impl Seeds {
             );
             if sampled_value < threshold {
                 seeds.push(point);
-                println!("Sampled value: {}",sampled_value);
                 i += 1;
             }
 
