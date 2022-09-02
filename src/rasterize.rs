@@ -1,3 +1,5 @@
+use std::vec;
+
 use crate::geometry::{distance, nearest_pixel, pixel, point, Line, Ordered_Polygon};
 use crate::{Canvas, Weighted_Canvas};
 use voronoi::Point;
@@ -164,8 +166,8 @@ pub fn polygon_raster_bbox(poly: &Ordered_Polygon) -> [[i32; 2]; 2] {
 
     // min and max values of bbox as pixels
     [
-        nearest_pixel(&Point::new(x_min, x_max)), // (min_x, max_x)
-        nearest_pixel(&Point::new(y_min, y_max)), // (min_y, max_y)
+        nearest_pixel(&Point::new(x_min, x_max + 1.)), // (min_x, max_x)
+        nearest_pixel(&Point::new(y_min, y_max + 1.)), // (min_y, max_y)
     ]
 }
 
@@ -199,14 +201,15 @@ pub fn scanline_rasterize_polygon(poly: &Ordered_Polygon, color: [f32; 3], canva
     let bbox = polygon_raster_bbox(&poly);
     let mut nodes;
     let mut scanline;
-    // println!("bbox: {},{}",bbox[1][0],bbox[1][1]);
+    println!("bbox: {:?}",bbox[0]);
+    println!("bbox: {:?}",bbox[1]);
     for y in bbox[1][0]..bbox[1][1] {
         //for y in y_min to y_max of polygon bbox
         nodes = scanline_nodes(&poly, y as f64, width);
         if nodes.len() > 0 {
             scanline = Line::from_nodes(&nodes);
             rasterize_line_naive(&scanline, color, canvas);
-            // println!("nodes: {:?}",nodes)
+            println!("nodes: {:?}",nodes)
         }
     }
 }
@@ -264,4 +267,24 @@ pub fn rasterize_circle(point: &Point, radius: i32, color: [f32; 3], canvas: &mu
             }
         }
     }
+}
+
+
+// ----------- testing logic ------------
+
+pub fn test_centroid(x_size: f64, y_size: f64, canvas: &mut Canvas) {
+    let buffer = 0.0;
+    let color = [0.0, 0.0, 1.0];
+    let rect = Ordered_Polygon {
+        vertices : vec![
+            [buffer, buffer],
+            [buffer + x_size, buffer],
+            [buffer + x_size, buffer + y_size],
+            [buffer, buffer + y_size]
+
+        ]
+    };
+
+    scanline_rasterize_polygon(&rect, color, canvas)
+
 }
