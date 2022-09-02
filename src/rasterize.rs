@@ -23,7 +23,7 @@ pub fn raster_centroid(poly: &Ordered_Polygon, canvas: &mut Canvas) -> Point {
             n_b = nodes[1][0];
             x1 = i32::min(n_a, n_b);
             x2 = i32::max(n_a, n_b);
-            for x in x1..x2 {
+            for x in x1..x2 - 1 {
                 // println!("({},{})",x,y);
                 cx += x as f32;
                 cy += y as f32;
@@ -63,7 +63,7 @@ pub fn weighted_raster_centroid(poly: &Ordered_Polygon, weights: &mut Weighted_C
             n_b = nodes[1][0];
             x1 = i32::min(n_a, n_b);
             x2 = i32::max(n_a, n_b);
-            for x in x1..x2 {
+            for x in x1..x2 - 1 {
                 weight = weights.read_pixel(x as usize, y as usize);
                 cx += weight * x as f32;
                 cy += weight * y as f32;
@@ -285,6 +285,10 @@ pub fn test_centroid(x_size: f64, y_size: f64, canvas: &mut Canvas) {
         ]
     };
 
-    scanline_rasterize_polygon(&rect, color, canvas)
+    scanline_rasterize_polygon(&rect, color, canvas);
+
+    let centroid = raster_centroid(&rect, canvas);
+
+    println!("Centroid: {:?}",centroid);
 
 }
