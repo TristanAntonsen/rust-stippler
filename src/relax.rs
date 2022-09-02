@@ -38,7 +38,7 @@ pub fn lloyd_relax(start_seeds: &Seeds,iterations: u16, width: f64, image_path: 
         }
         seeds.coords = new_points;
 
-        let mut canvas = Canvas::new(1080 as usize, 1080 as usize);
+        let mut canvas = Canvas::new(512 as usize, 512 as usize);
 
         for point in &seeds.coords {
             rasterize_circle(&point, 2, [1.0, 1.0, 1.0], &mut canvas)

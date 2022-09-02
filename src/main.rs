@@ -34,11 +34,15 @@ fn main() {
     let mut canvas2 = Canvas::new(WIDTH as usize, HEIGHT as usize);
     let mut canvas3 = Canvas::new(WIDTH as usize, HEIGHT as usize);
 
+    //weight canvas
+    let mut weight_canvas = Weighted_Canvas::from_image("blob.png");
     //creating start seeds
-    let mut seeds = Seeds::uniform(&canvas, 1000);
+    // let mut seeds = Seeds::uniform(&canvas, 1000);
+    let mut seeds = Seeds::rejection_sample(&weight_canvas, 150, 0.45);
+
     let start_seeds = seeds.clone();
 
-    let relaxed = lloyd_relax(&start_seeds, 60, WIDTH as f64, "white.png");
+    let relaxed = lloyd_relax(&start_seeds, 30, WIDTH as f64, "blob.png");
 
     for seed in start_seeds.coords {
         rasterize_circle(&seed, 3, _WHITE, &mut canvas2)

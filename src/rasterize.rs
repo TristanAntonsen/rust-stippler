@@ -65,7 +65,7 @@ pub fn weighted_raster_centroid(poly: &Ordered_Polygon, weights: &mut Weighted_C
             x1 = i32::min(n_a, n_b);
             x2 = i32::max(n_a, n_b);
             for x in x1..x2 - 1 {
-                weight = weights.read_pixel(x as usize, y as usize);
+                weight = 1.0 - weights.read_pixel(x as usize, y as usize);
                 cx += weight * x as f32;
                 cy += weight * y as f32;
 
@@ -159,15 +159,12 @@ pub fn scanline_rasterize_polygon(poly: &Ordered_Polygon, color: [f32; 3], canva
     let bbox = polygon_raster_bbox(&poly);
     let mut nodes;
     let mut scanline;
-    println!("bbox: {:?}",bbox[0]);
-    println!("bbox: {:?}",bbox[1]);
     for y in bbox[1][0]..bbox[1][1] {
         //for y in y_min to y_max of polygon bbox
         nodes = scanline_nodes(&poly, y as f64, width);
         if nodes.len() > 0 {
             scanline = Line::from_nodes(&nodes);
             rasterize_line_naive(&scanline, color, canvas);
-            println!("nodes: {:?}",nodes)
         }
     }
 }
