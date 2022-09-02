@@ -1,5 +1,3 @@
-from ast import arg
-from email.mime import image
 import cv2
 import os
 import sys
