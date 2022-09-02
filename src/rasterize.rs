@@ -86,49 +86,6 @@ pub fn weighted_raster_centroid(poly: &Ordered_Polygon, weights: &mut Weighted_C
     centroid
 }
 
-pub fn weighted_polygon_centroid(poly: &Ordered_Polygon, weights: &mut Weighted_Canvas) -> Point {
-    let width = weights.pixel_weights[0].len() as f64;
-    let bbox = polygon_raster_bbox(&poly);
-
-    let mut nodes;
-    let mut cx = 0.0;
-    let mut cy = 0.0;
-    let mut value;
-    let mut weight;
-    let mut total_weight = 0.0;
-    let mut pixel_count = 0;
-    for y in bbox[1][0]..bbox[1][1] {
-        nodes = scanline_nodes(&poly, y as f64, width);
-        if nodes.len() > 0 {
-            for x in nodes[1][0]..nodes[0][0] {
-                //from large to small, need to validate
-                value = weights.read_pixel(x as usize, y as usize);
-                weight = 1.0 - value;
-                total_weight += weight;
-
-                cx += x as f32 * weight;
-                cy += y as f32 * weight;
-
-                pixel_count += 1;
-            }
-            // calculate weights for pixels between nodes (including ends?)
-        }
-    }
-
-    if total_weight == 0.0 {
-        total_weight = pixel_count as f32;
-    }
-
-    cx /= total_weight;
-    cy /= total_weight;
-
-    if pixel_count == 0 {
-        return Point::new(0., 0.);
-    };
-    let centroid = Point::new(cx as f64, cy as f64);
-    centroid
-}
-
 pub fn line_raster_bbox(line: &Line) -> [pixel; 2] {
     let x_min = f64::min(line.points[0][0], line.points[1][0]);
     let x_max = f64::max(line.points[0][0], line.points[1][0]);
