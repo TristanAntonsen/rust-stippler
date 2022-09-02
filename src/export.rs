@@ -4,7 +4,7 @@ extern crate image;
 use image::{ImageBuffer, Rgb, RgbImage};
 
 
-pub fn save_png(path: &str, canvas: Canvas) {
+pub fn save_image(path: &str, canvas: Canvas) {
     let width = canvas.pixels.len() as u32;
     let height = canvas.pixels[0].len() as u32;
 
@@ -25,8 +25,10 @@ pub fn save_png(path: &str, canvas: Canvas) {
     }
     println!("{} exported.", path);
     
-    img.save(path).expect("Could not save png");
+    img.save(path).expect("Could not save image");
 }
+
+
 pub fn save_grayscale_png(path: &str, canvas: Weighted_Canvas) { // rework with generics/traits later
     let width = canvas.pixel_weights.len() as u32;
     let height = canvas.pixel_weights[0].len() as u32;

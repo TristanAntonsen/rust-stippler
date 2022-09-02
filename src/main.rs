@@ -7,7 +7,7 @@ mod relax;
 use std::ops::Mul;
 
 use canvas::{random_color, Canvas, Weighted_Canvas, random_grayscale};
-use export::save_png;
+use export::save_image;
 use geometry::{vertex_centroid, Line, Ordered_Polygon, Unordered_Polygon};
 use rasterize::{ rasterize_circle, scanline_rasterize_polygon,
     weighted_raster_centroid, test_centroid};
@@ -80,9 +80,9 @@ fn main() {
     }
 
 
-    save_png("start_seeds.png", canvas2);
-    save_png("end_seeds.png", canvas3);
-    save_png("canvas.png", canvas);
+    save_image("start_seeds.jpg", canvas2);
+    save_image("end_seeds.jpg", canvas3);
+    save_image("canvas.jpg", canvas);
 }
 
 

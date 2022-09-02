@@ -3,7 +3,7 @@ use crate::geometry::{vertex_centroid, Line, Ordered_Polygon, Unordered_Polygon}
 use crate::{geometry::point, seed::Seeds};
 use crate::{weighted_raster_centroid, rasterize_circle};
 use voronoi::{make_line_segments, make_polygons, voronoi, Point};
-use crate::export::save_png;
+use crate::export::save_image;
 pub fn lloyd_relax(start_seeds: &Seeds,iterations: u16, width: f64, image_path: &str) -> Vec<Point> {
     let mut seeds = start_seeds.clone();
     // TO DO: figure out what condition causes weighted_raster_centroid to return NaN
@@ -47,8 +47,8 @@ pub fn lloyd_relax(start_seeds: &Seeds,iterations: u16, width: f64, image_path: 
         }
         
         file_name.push_str(&i.to_string());
-        file_name.push_str(".png");
-        save_png(&file_name[..], canvas);
+        file_name.push_str(".jpg");
+        save_image(&file_name[..], canvas);
     }
 
     seeds.coords
