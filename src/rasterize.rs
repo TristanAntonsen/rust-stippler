@@ -25,7 +25,6 @@ pub fn raster_centroid(poly: &Ordered_Polygon, canvas: &mut Canvas) -> Point {
             x1 = i32::min(n_a, n_b);
             x2 = i32::max(n_a, n_b);
             for x in x1..x2 - 1 {
-                // println!("({},{})",x,y);
                 cx += x as f32;
                 cy += y as f32;
 
@@ -78,7 +77,6 @@ pub fn weighted_raster_centroid(poly: &Ordered_Polygon, weights: &mut Weighted_C
     if pixel_count == 0.0 || total_weight == 0.0 {
         return Point::new(0., 0.);
     };
-    // println!("total_weight: {}",total_weight);
     cx /= total_weight;
     cy /= total_weight;
 
@@ -99,12 +97,10 @@ pub fn line_raster_bbox(line: &Line) -> [pixel; 2] {
         nearest_pixel(&Point::new(y_min, y_max)),
     ]
 }
+
 pub fn polygon_raster_bbox(poly: &Ordered_Polygon) -> [[i32; 2]; 2] {
     let edges = poly.create_edges();
-    // let mut x_min = edges[0].points[0][0]; //arbitrarily choosing first edge point
-    // let mut y_min = edges[0].points[1][0];
-    // let mut x_max = edges[0].points[0][0];
-    // let mut y_max = edges[0].points[1][0];
+
     let mut x_vals = Vec::new();
     let mut y_vals = Vec::new();
     for e in edges {
