@@ -65,6 +65,25 @@ impl Canvas {
             return [0.0, 0.0, 0.0]; //return black
         }
     }
+    pub fn from_image(path: &str) -> Self {
+        let img = ImageReader::open(path).expect("Error.").decode().expect("Error.");
+        let width = img.width() as usize;
+        let height = img.height() as usize;
+        let (mut r, mut g, mut b);
+        let (mut x, mut y);
+        let mut pixels = vec![vec![[0.0;3]; width]; height];
+        for pixel in img.pixels() {
+            r = pixel.2[0] as f32;
+            g = pixel.2[1] as f32;
+            b = pixel.2[2] as f32;
+            x = pixel.0 as usize;
+            y = pixel.1 as usize;
+            pixels[x][y] = [r, g, b];
+        };
+        Self {
+            pixels: pixels
+        }
+    }
     pub fn to_grayscale(&mut self) -> Weighted_Canvas {
         let w = self.pixels[0].len();
         let h = self.pixels.len();
