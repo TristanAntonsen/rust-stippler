@@ -1,1 +1,7 @@
 /target
+/sequence
+/test-images
+/venv
+/*.jpg
+/*.png
+/*.mp4
