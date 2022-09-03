@@ -26,6 +26,25 @@ impl Seeds {
         }
     }
 
+    pub fn cartesian(canvas: &Weighted_Canvas, spacing: f64) -> Self {
+        let width = canvas.pixel_weights[0].len();
+        let height = canvas.pixel_weights.len();
+        let mut seeds = Vec::new();
+        let mut point;
+        let x_count = (width as f64 / spacing).round() as u32;
+        let y_count = (height as f64 / spacing).round() as u32;
+        for x in 0..x_count {
+            for y in 0..y_count {
+                point = Point::new(x as f64,y as f64);
+                seeds.push(point);
+            }
+        }
+
+        Self {
+            coords: seeds
+        }
+    }
+
 
     pub fn rejection_sample(weights: &Weighted_Canvas, count: usize, threshold: f32) -> Self {
         let width = weights.pixel_weights[0].len();

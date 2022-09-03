@@ -63,7 +63,7 @@ pub fn visualize_frame(frame: u16, seeds: &Seeds, width: usize, height: usize, s
         x = f64::try_from(point.x).unwrap() * scale as f64;
         y = f64::try_from(point.y).unwrap() * scale as f64;
         scaled_point = Point::new(x,y);
-        rasterize_circle(&scaled_point, 3, [0.0, 0.0, 0.0], &mut canvas)
+        rasterize_circle(&scaled_point, 4, [0.0, 0.0, 0.0], &mut canvas)
     }
     
     file_name.push_str(&frame.to_string());

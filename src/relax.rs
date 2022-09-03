@@ -52,7 +52,7 @@ pub fn lloyd_relax(start_seeds: &Seeds,iterations: u16, width: f64, image_path: 
         // file_name.push_str(".jpg");
         // save_image(&file_name[..], canvas);
         // println!("iteration {}",i);
-        visualize_frame(i, &seeds, width as usize, width as usize, 2, [1.0,1.0,1.0], [0.0,0.0,0.0])
+        // visualize_frame(i, &seeds, width as usize, width as usize, 2, [1.0,1.0,1.0], [0.0,0.0,0.0])
     }
 
     seeds.coords

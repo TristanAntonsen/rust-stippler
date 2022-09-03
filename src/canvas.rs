@@ -106,3 +106,4 @@ pub fn color_average(color: &color) -> f32 {
     (color[0] + color[1] + color[2]) as f32 / 3.0
 
 }
+
