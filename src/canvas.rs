@@ -49,6 +49,11 @@ impl Canvas {
             pixels: vec![vec![[0.0, 0.0, 0.0]; height]; width],
         }
     }
+    pub fn solid_color(width: usize, height: usize, color: color) -> Self {
+        Self {
+            pixels: vec![vec![color; height]; width],
+        }
+    }
     pub fn write_pixel(&mut self, x: usize, y: usize, color: color) {
         if x < self.pixels[0].len() && y < self.pixels.len() {
             self.pixels[x][y] = color

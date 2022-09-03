@@ -40,10 +40,10 @@ pub fn lloyd_relax(start_seeds: &Seeds,iterations: u16, width: f64, image_path: 
         // --------------
         // EXPORTING SEQUENCE
         // --------------
-        let mut canvas = Canvas::new(width as usize, width as usize);
+        let mut canvas = Canvas::solid_color(width as usize, width as usize,[1.0,1.0,1.0]);
         let mut file_name = "sequence/".to_string();
         for point in &seeds.coords {
-            rasterize_circle(&point, 2, [1.0, 1.0, 1.0], &mut canvas)
+            rasterize_circle(&point, 4, [0.0, 0.0, 0.0], &mut canvas)
         }
         
         file_name.push_str(&i.to_string());

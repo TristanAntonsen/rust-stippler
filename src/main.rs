@@ -32,30 +32,30 @@ fn main() {
     const _BLACK: [f32; 3] = [0.0, 0.0, 0.0];
 
     //weight canvas
-    let file_path = "sampling/test_im_2_500.png";
+    let file_path = "sampling/mannequin.jpg";
     let mut weight_canvas = Weighted_Canvas::from_image(file_path);
     let WIDTH = weight_canvas.pixel_weights[0].len();
     let HEIGHT = weight_canvas.pixel_weights.len();
     
-    //main canvas
+    //main canvas1
     let mut canvas = Canvas::new(WIDTH as usize, HEIGHT as usize);
     let mut canvas2 = Canvas::new(WIDTH as usize, HEIGHT as usize);
-    let mut canvas3 = Canvas::new(WIDTH as usize, HEIGHT as usize);
+    let mut canvas3 = Canvas::solid_color(WIDTH as usize, HEIGHT as usize, _WHITE);
 
 
     //creating start seeds
     // let mut seeds = Seeds::uniform(&canvas, 1000);
-    let mut seeds = Seeds::rejection_sample(&weight_canvas, 200, 0.3);
+    let mut seeds = Seeds::rejection_sample(&weight_canvas, 1000, 1.0);
 
     let start_seeds = seeds.clone();
 
-    let relaxed = lloyd_relax(&start_seeds, 30, WIDTH as f64, file_path);
+    let relaxed = lloyd_relax(&start_seeds, 90, WIDTH as f64, file_path);
 
     for seed in start_seeds.coords {
-        rasterize_circle(&seed, 3, _WHITE, &mut canvas2)
+        rasterize_circle(&seed, 3, _BLACK, &mut canvas2)
     }
     for seed in &relaxed {
-        rasterize_circle(&seed, 3, _WHITE, &mut canvas3)
+        rasterize_circle(&seed, 3, _BLACK, &mut canvas3)
     }
     // let mut scaled;
     // for seed in &relaxed {
