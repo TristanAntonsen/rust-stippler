@@ -1,8 +1,7 @@
 use rand::Rng;
-use image::{ImageBuffer, Rgb, RgbImage, GenericImageView};
+use image::GenericImageView;
 use image::io::Reader as ImageReader;
 
-use crate::geometry::pixel;
 pub type color = [f32; 3];
 pub struct Canvas {
     pub pixels: Vec<Vec<color>>,
@@ -34,7 +33,6 @@ impl Weighted_Canvas {
             x = pixel.0 as usize;
             y = pixel.1 as usize;
             pixels[x][y] = (r + g + b) / (3.0 * 255.0);
-            // println!("{:?}",(r + g + b) / (3.0 * 255.0))
         };
         Self {
             pixel_weights: pixels
