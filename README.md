@@ -1,9 +1,14 @@
-# rust- [ ]stippler
+# rust-stippler
 Weighted voronoi point stippling in Rust
-- [Reference - [ ] *Weighted Voronoi Point Stippling*](https://www.cs.ubc.ca/labs/imager/tr/2002/secord2002b/secord.2002b.pdf)
+- [Reference - *Weighted Voronoi Point Stippling*](https://www.cs.ubc.ca/labs/imager/tr/2002/secord2002b/secord.2002b.pdf)
 
 
 # To Dos:
+
+## Other ideas:
+- [ ] Colored points
+- [ ] Colored voronoi cells
+
 ## Geometry types
 - [X] Point
 - [X] Pixel
@@ -14,9 +19,9 @@ Weighted voronoi point stippling in Rust
 ## Geometry functions
 - [X] Voronoi diagram
 - [X] Line intersection
-- [ ] Polygon edges
-- [ ] Sort vertices
-- [ ] Vertex centroid (optional)
+- [X] Polygon edges
+- [X] Sort vertices
+- [X] Vertex centroid (optional)
 
 ## Rasterizing
 - [X] Raster Line
@@ -24,15 +29,15 @@ Weighted voronoi point stippling in Rust
 - [X] Raster BBox
 - [X] Raster Scanline
 - [X] Scanline rasterize polygon
-- [ ] Weighted raster centroid
+- [X] Weighted raster centroid
 
 ## Math
-- [x] Random numbers
-- [x] Random seeds (uniform)
-- [ ] Random seeds (rejection sampling)
+- [X] Random numbers
+- [X] Random seeds (uniform)
+- [X] Random seeds (rejection sampling)
 - [X] Nearest pixel
 
 ## Image
-- [ ] Read pixel
+- [X] Read pixel
 - [X] Write pixel to canvas
 - [X] Export as image
