@@ -1,12 +1,9 @@
-use std::fs;
 use crate::{Canvas, Weighted_Canvas, canvas::color};
 extern crate image;
-use image::{ImageBuffer, Rgb, RgbImage};
+use image::{Rgb, RgbImage};
 use voronoi::Point;
 use crate::seed::Seeds;
 use crate::rasterize_circle;
-use std::ops::Mul;
-use ordered_float::OrderedFloat;
 
 pub fn save_image(path: &str, canvas: Canvas) {
     let width = canvas.pixels.len() as u32;
