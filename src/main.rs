@@ -7,14 +7,13 @@ mod relax;
 use std::env;
 
 use canvas::{random_color, Canvas, Weighted_Canvas};
-use export::save_image;
+use export::{save_image, save_rgb_image};
 use geometry::Unordered_Polygon;
-use rasterize::{rasterize_circle, scanline_rasterize_polygon,weighted_raster_centroid};
+use rasterize::{rasterize_circle, scanline_rasterize_polygon,weighted_raster_centroid, color_sampled_voronoi};
 use seed::Seeds;
 extern crate voronoi;
 use voronoi::voronoi;
-
-use crate::relax::lloyd_relax;
+use relax::lloyd_relax;
 
 
 fn main() {
@@ -60,19 +59,23 @@ fn main() {
         rasterize_circle(&seed, 2, _BLACK, &mut canvas3)
     }
 
-    let vor_diagram = voronoi(relaxed, 1080.);
+    let vor_diagram = voronoi(relaxed, WIDTH as f64);
+    let mut color_canvas = Canvas::new(WIDTH, HEIGHT);
 
     let faces = voronoi::make_polygons(&vor_diagram);
-    let mut sorted;
-    let mut color;
+    // let mut sorted;
+    // let mut color;
 
-    for face in faces {
-        sorted = Unordered_Polygon::from_face(&face).sort();
-        color = random_color();
+    // for face in faces {
+    //     sorted = Unordered_Polygon::from_face(&face).sort();
+    //     color = random_color();
+    //     // centroid = weighted_raster_centroid(&sorted, &mut weight_canvas);
 
-        scanline_rasterize_polygon(&sorted, color, &mut canvas);
-    }
-
+    //     scanline_rasterize_polygon(&sorted, color, &mut color_canvas);
+    // }
+    color_sampled_voronoi(file_path, faces, &mut color_canvas, &mut weight_canvas);
+    
+    save_rgb_image("voronoi_colors.png", color_canvas);
     save_image("start_seeds.jpg", canvas2);
     save_image("end_seeds.jpg", canvas3);
 }

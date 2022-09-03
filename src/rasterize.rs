@@ -1,8 +1,9 @@
 use std::vec;
 
-use crate::geometry::{distance, nearest_pixel, pixel, point, Line, Ordered_Polygon};
+use crate::canvas::color;
+use crate::geometry::{distance, nearest_pixel, pixel, Line, Ordered_Polygon, Unordered_Polygon};
 use crate::{Canvas, Weighted_Canvas};
-use voronoi::Point;
+use voronoi::{Point, DCEL};
 
 pub const _TEST_LINE: Line = Line {
     points: [[200.0, 10.0], [40.0, 200.0]],
@@ -85,6 +86,44 @@ pub fn weighted_raster_centroid(poly: &Ordered_Polygon, weights: &mut Weighted_C
     centroid
 }
 
+// pub fn average_cell_color(poly: &Ordered_Polygon, weights: &mut Weighted_Canvas) -> () {
+//     let width = weights.pixel_weights[0].len() as f64;
+//     let bbox = polygon_raster_bbox(&poly);
+
+//     let mut nodes;
+//     let mut cx = 0.0;
+//     let mut cy = 0.0;
+//     let mut pixel_count = 0.0;
+//     let (mut x1, mut x2, mut n_a, mut n_b);
+//     let mut weight;
+//     let mut total_weight = 0.0;
+//     for y in bbox[1][0]..bbox[1][1] - 1 {
+//         nodes = scanline_nodes(&poly, y as f64, width);
+//         if nodes.len() > 0 {
+//             n_a = nodes[0][0];
+//             n_b = nodes[1][0];
+//             x1 = i32::min(n_a, n_b);
+//             x2 = i32::max(n_a, n_b);
+//             for x in x1..x2 - 1 {
+//                 weight = 1.0 - weights.read_pixel(x as usize, y as usize);
+//                 cx += weight * x as f32;
+//                 cy += weight * y as f32;
+
+//                 total_weight += weight;
+//                 pixel_count += 1.0;
+//             }
+//         };
+//     }
+
+//     if pixel_count == 0.0 || total_weight == 0.0 {
+//         return ();
+//     };
+//     cx /= total_weight;
+//     cy /= total_weight;
+
+//     let centroid = Point::new(cx as f64, cy as f64);
+
+// }
 pub fn line_raster_bbox(line: &Line) -> [pixel; 2] {
     let x_min = f64::min(line.points[0][0], line.points[1][0]);
     let x_max = f64::max(line.points[0][0], line.points[1][0]);
@@ -220,6 +259,25 @@ pub fn rasterize_circle(point: &Point, radius: i32, color: [f32; 3], canvas: &mu
     }
 }
 
+pub fn color_sampled_voronoi(path: &str, cells: Vec<Vec<Point>>, canvas: &mut Canvas, weights: &mut Weighted_Canvas) {
+    let mut sorted;
+    let mut color;
+    let mut color_canvas = Canvas::from_image(path);
+    let (mut centroid, mut cx, mut cy);
+    color = color_canvas.read_pixel(540,100);
+    println!("Color: {:?}",color);
+    for face in cells {
+        sorted = Unordered_Polygon::from_face(&face).sort();
+        centroid = weighted_raster_centroid(&sorted, weights);
+        cx = f64::try_from(centroid.x).unwrap().round();
+        cy = f64::try_from(centroid.y).unwrap().round();
+        color = color_canvas.read_pixel(cx as usize, cy as usize);
+        println!("{:?}",color);
+        scanline_rasterize_polygon(&sorted, color, canvas);
+        rasterize_circle(&Point::new(cx / 255.0, cy / 255.0), 3, [0.0,0.0,0.0], canvas)
+    }
+
+}
 
 // ----------- testing logic ------------
 
