@@ -3,7 +3,6 @@ use std::f32::consts::PI;
 use nalgebra::Matrix1x3;
 use voronoi::{Point, DCEL};
 use radsort;
-use ordered_float;
 pub type point = [f64; 2];
 pub type pixel = [i32; 2];
 pub struct Ordered_Polygon {
@@ -78,7 +77,7 @@ impl Ordered_Polygon {
             theta += inc;
         };
 
-        Self {
+        Self {  
             vertices : vertices
         }
 
