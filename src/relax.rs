@@ -3,7 +3,9 @@ use crate::geometry::{vertex_centroid, Line, Ordered_Polygon, Unordered_Polygon}
 use crate::{geometry::point, seed::Seeds};
 use crate::{weighted_raster_centroid, rasterize_circle};
 use voronoi::{make_line_segments, make_polygons, voronoi, Point};
-use crate::export::save_image;
+use crate::export::{save_image, visualize_frame};
+
+
 pub fn lloyd_relax(start_seeds: &Seeds,iterations: u16, width: f64, image_path: &str) -> Vec<Point> {
     let mut seeds = start_seeds.clone();
     // TO DO: figure out what condition causes weighted_raster_centroid to return NaN
@@ -40,15 +42,17 @@ pub fn lloyd_relax(start_seeds: &Seeds,iterations: u16, width: f64, image_path: 
         // --------------
         // EXPORTING SEQUENCE
         // --------------
-        let mut canvas = Canvas::solid_color(width as usize, width as usize,[1.0,1.0,1.0]);
-        let mut file_name = "sequence/".to_string();
-        for point in &seeds.coords {
-            rasterize_circle(&point, 4, [0.0, 0.0, 0.0], &mut canvas)
-        }
+        // let mut canvas = Canvas::solid_color(width as usize, width as usize,[1.0,1.0,1.0]);
+        // let mut file_name = "sequence/".to_string();
+        // for point in &seeds.coords {
+        //     rasterize_circle(&point, 3, [0.0, 0.0, 0.0], &mut canvas)
+        // }
         
-        file_name.push_str(&i.to_string());
-        file_name.push_str(".jpg");
-        save_image(&file_name[..], canvas);
+        // file_name.push_str(&i.to_string());
+        // file_name.push_str(".jpg");
+        // save_image(&file_name[..], canvas);
+        // println!("iteration {}",i);
+        visualize_frame(i, &seeds, width as usize, width as usize, 2, [1.0,1.0,1.0], [0.0,0.0,0.0])
     }
 
     seeds.coords

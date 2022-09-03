@@ -45,17 +45,17 @@ fn main() {
 
     //creating start seeds
     // let mut seeds = Seeds::uniform(&canvas, 1000);
-    let mut seeds = Seeds::rejection_sample(&weight_canvas, 1000, 1.0);
+    let mut seeds = Seeds::rejection_sample(&weight_canvas,1000, 0.5);
 
     let start_seeds = seeds.clone();
 
-    let relaxed = lloyd_relax(&start_seeds, 90, WIDTH as f64, file_path);
+    let relaxed = lloyd_relax(&start_seeds, 90 , WIDTH as f64, file_path);
 
     for seed in start_seeds.coords {
-        rasterize_circle(&seed, 3, _BLACK, &mut canvas2)
+        rasterize_circle(&seed, 2, _BLACK, &mut canvas2)
     }
     for seed in &relaxed {
-        rasterize_circle(&seed, 3, _BLACK, &mut canvas3)
+        rasterize_circle(&seed, 2, _BLACK, &mut canvas3)
     }
     // let mut scaled;
     // for seed in &relaxed {
@@ -78,7 +78,6 @@ fn main() {
 
         scanline_rasterize_polygon(&sorted, color, &mut canvas);
     }
-
 
     save_image("start_seeds.jpg", canvas2);
     save_image("end_seeds.jpg", canvas3);

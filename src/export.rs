@@ -1,8 +1,12 @@
 use std::fs;
-use crate::{Canvas, Weighted_Canvas};
+use crate::{Canvas, Weighted_Canvas, canvas::color};
 extern crate image;
 use image::{ImageBuffer, Rgb, RgbImage};
-
+use voronoi::Point;
+use crate::seed::Seeds;
+use crate::rasterize_circle;
+use std::ops::Mul;
+use ordered_float::OrderedFloat;
 
 pub fn save_image(path: &str, canvas: Canvas) {
     let width = canvas.pixels.len() as u32;
@@ -47,4 +51,22 @@ pub fn save_grayscale_png(path: &str, canvas: Weighted_Canvas) { // rework with 
     println!("{} exported.", path);
     
     img.save(path).expect("Could not save png");
+}
+
+pub fn visualize_frame(frame: u16, seeds: &Seeds, width: usize, height: usize, scale: usize, background_color: color, dot_color: color ) {
+    let mut canvas = Canvas::solid_color(width * scale, width * scale,background_color);
+    let mut file_name = "sequence/".to_string();
+    let mut scaled_point: Point;
+    let (mut x, mut y);
+    for point in &seeds.coords {
+        //hacky, need to fix this
+        x = f64::try_from(point.x).unwrap() * scale as f64;
+        y = f64::try_from(point.y).unwrap() * scale as f64;
+        scaled_point = Point::new(x,y);
+        rasterize_circle(&scaled_point, 3, [0.0, 0.0, 0.0], &mut canvas)
+    }
+    
+    file_name.push_str(&frame.to_string());
+    file_name.push_str(".jpg");
+    save_image(&file_name[..], canvas);
 }
