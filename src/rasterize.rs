@@ -264,8 +264,6 @@ pub fn color_sampled_voronoi(path: &str, cells: Vec<Vec<Point>>, canvas: &mut Ca
     let mut color;
     let mut color_canvas = Canvas::from_image(path);
     let (mut centroid, mut cx, mut cy);
-    color = color_canvas.read_pixel(540,100);
-    println!("Color: {:?}",color);
     for face in cells {
         sorted = Unordered_Polygon::from_face(&face).sort();
         centroid = weighted_raster_centroid(&sorted, weights);
