@@ -1,7 +1,6 @@
 use crate::geometry::nearest_pixel;
 use crate::{Canvas,Weighted_Canvas};
 use rand::Rng;
-// use rand::prelude::*;
 use rand::distributions::Uniform;
 use voronoi::Point;
 
