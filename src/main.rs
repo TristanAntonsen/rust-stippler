@@ -6,24 +6,16 @@ mod seed;
 mod relax;
 use std::env;
 
-use canvas::{random_color, Canvas, Weighted_Canvas, random_grayscale};
+use canvas::{random_color, Canvas, Weighted_Canvas};
 use export::save_image;
-use geometry::{vertex_centroid, Line, Ordered_Polygon, Unordered_Polygon};
-use rasterize::{ rasterize_circle, scanline_rasterize_polygon,
-    weighted_raster_centroid, test_centroid};
+use geometry::Unordered_Polygon;
+use rasterize::{rasterize_circle, scanline_rasterize_polygon,weighted_raster_centroid};
 use seed::Seeds;
 extern crate voronoi;
-use voronoi::{make_line_segments, make_polygons, voronoi, Point};
-use image::{ImageBuffer, Rgb, RgbImage, GenericImageView};
-use image::io::Reader as ImageReader;
+use voronoi::voronoi;
 
-use crate::geometry::point;
-use crate::rasterize::{raster_centroid, rasterize_line_naive};
 use crate::relax::lloyd_relax;
-// use relax::lloyd_relax;
 
-// const WIDTH: i32 =512;
-// const HEIGHT: i32 = 512;
 
 fn main() {
     const _RED: [f32; 3] = [1.0, 0.0, 0.0];
