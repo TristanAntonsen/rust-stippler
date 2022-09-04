@@ -31,28 +31,25 @@ fn main() {
     let threshold: f32 = args[4].to_string().parse().unwrap();
     // --------- //
     //weight canvas
-    // let file_path = "sampling/circle512.png";
     let file_path = &image_path;
     let mut weight_canvas = Weighted_Canvas::from_image(file_path);
     let WIDTH = weight_canvas.pixel_weights[0].len();
     let HEIGHT = weight_canvas.pixel_weights.len();
     
     //main canvas1
-    let mut canvas = Canvas::new(WIDTH as usize, HEIGHT as usize);
     let mut canvas2 = Canvas::solid_color(WIDTH as usize, HEIGHT as usize, _WHITE);
     let mut canvas3 = Canvas::solid_color(WIDTH as usize, HEIGHT as usize, _WHITE);
+    let mut color_canvas = Canvas::new(WIDTH, HEIGHT);
 
 
     //creating start seeds
     // let mut seeds = Seeds::uniform(&canvas, points);
-    let mut seeds = Seeds::rejection_sample(&weight_canvas,points, threshold);
     // let mut seeds = Seeds::cartesian(&weight_canvas,60.0);
+    let seeds = Seeds::rejection_sample(&weight_canvas,points, threshold);
 
-    let start_seeds = seeds.clone();
+    let relaxed = lloyd_relax(&seeds, iterations, WIDTH as f64, file_path);
 
-    let relaxed = lloyd_relax(&start_seeds, iterations, WIDTH as f64, file_path);
-
-    for seed in start_seeds.coords {
+    for seed in seeds.coords {
         rasterize_circle(&seed, 2, _BLACK, &mut canvas2)
     }
     for seed in &relaxed {
@@ -60,24 +57,14 @@ fn main() {
     }
 
     let vor_diagram = voronoi(relaxed, WIDTH as f64);
-    let mut color_canvas = Canvas::new(WIDTH, HEIGHT);
 
     let faces = voronoi::make_polygons(&vor_diagram);
-    // let mut sorted;
-    // let mut color;
 
-    // for face in faces {
-    //     sorted = Unordered_Polygon::from_face(&face).sort();
-    //     color = random_color();
-    //     // centroid = weighted_raster_centroid(&sorted, &mut weight_canvas);
-
-    //     scanline_rasterize_polygon(&sorted, color, &mut color_canvas);
-    // }
     color_sampled_voronoi(file_path, faces, &mut color_canvas, &mut weight_canvas);
     
-    save_rgb_image("voronoi_colors.png", color_canvas);
-    save_image("start_seeds.jpg", canvas2);
+    save_image("seeds.jpg", canvas2);
     save_image("end_seeds.jpg", canvas3);
+    save_rgb_image("voronoi_colors.png", color_canvas);
 }
 
 
