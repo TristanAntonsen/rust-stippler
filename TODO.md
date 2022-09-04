@@ -25,6 +25,7 @@
 - [X] Raster Scanline
 - [X] Scanline rasterize polygon
 - [X] Weighted raster centroid
+- [ ] Average polygon color
 
 ## Math
 - [X] Random numbers
