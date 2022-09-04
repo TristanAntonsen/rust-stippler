@@ -42,7 +42,7 @@ pub fn lloyd_relax(start_seeds: &Seeds,iterations: u16, width: f64, image_path: 
         // --------------
 
         if frames {
-            visualize_frame(i, &seeds, width as usize, width as usize, 2, [1.0,1.0,1.0], [0.0,0.0,0.0])
+            visualize_frame(i + 1, &seeds, width as usize, width as usize, 2, [1.0,1.0,1.0], [0.0,0.0,0.0])
         }
     }
 
