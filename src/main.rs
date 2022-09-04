@@ -4,8 +4,9 @@ mod geometry;
 mod rasterize;
 mod seed;
 mod relax;
-use std::env;
+mod cli;
 
+use std::env;
 use canvas::{random_color, Canvas, Weighted_Canvas};
 use export::{save_image, save_rgb_image};
 use geometry::Unordered_Polygon;
@@ -14,7 +15,8 @@ use seed::Seeds;
 extern crate voronoi;
 use voronoi::voronoi;
 use relax::lloyd_relax;
-
+use structopt::StructOpt;
+use cli::Opt;
 
 fn main() {
     const _RED: [f32; 3] = [1.0, 0.0, 0.0];
@@ -24,11 +26,15 @@ fn main() {
     const _BLACK: [f32; 3] = [0.0, 0.0, 0.0];
 
     // ARGUMENTS //
-    let args: Vec<String> = env::args().collect();
-    let image_path = &args[1];
-    let points: usize = args[2].to_string().parse().unwrap();
-    let iterations: u16 = args[3].to_string().parse().unwrap();
-    let threshold: f32 = args[4].to_string().parse().unwrap();
+
+    let opt = Opt::from_args();
+    let image_path = opt.input.to_str().unwrap();
+    let points: usize = opt.count;
+    let iterations: u16 = opt.iterations;
+    let threshold: f32 = opt.threshold;
+    let save_frames: bool = opt.frames;
+    
+
     // --------- //
     //weight canvas
     let file_path = &image_path;
@@ -47,7 +53,7 @@ fn main() {
     // let mut seeds = Seeds::cartesian(&weight_canvas,60.0);
     let seeds = Seeds::rejection_sample(&weight_canvas,points, threshold);
 
-    let relaxed = lloyd_relax(&seeds, iterations, WIDTH as f64, file_path);
+    let relaxed = lloyd_relax(&seeds, iterations, WIDTH as f64, file_path, save_frames);
 
     for seed in seeds.coords {
         rasterize_circle(&seed, 2, _BLACK, &mut canvas2)
@@ -62,7 +68,7 @@ fn main() {
 
     color_sampled_voronoi(file_path, faces, &mut color_canvas, &mut weight_canvas);
     
-    save_image("seeds.jpg", canvas2);
+    save_image("start_seeds.jpg", canvas2);
     save_image("end_seeds.jpg", canvas3);
     save_rgb_image("voronoi_colors.png", color_canvas);
 }

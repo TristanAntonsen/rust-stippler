@@ -6,7 +6,7 @@ use voronoi::{voronoi, Point};
 use crate::export::{visualize_frame};
 
 
-pub fn lloyd_relax(start_seeds: &Seeds,iterations: u16, width: f64, image_path: &str) -> Vec<Point> {
+pub fn lloyd_relax(start_seeds: &Seeds,iterations: u16, width: f64, image_path: &str, frames: bool) -> Vec<Point> {
     let mut seeds = start_seeds.clone();
     // TO DO: figure out what condition causes weighted_raster_centroid to return NaN
 
@@ -41,7 +41,9 @@ pub fn lloyd_relax(start_seeds: &Seeds,iterations: u16, width: f64, image_path: 
         // EXPORTING SEQUENCE
         // --------------
 
-        // visualize_frame(i, &seeds, width as usize, width as usize, 2, [1.0,1.0,1.0], [0.0,0.0,0.0])
+        if frames {
+            visualize_frame(i, &seeds, width as usize, width as usize, 2, [1.0,1.0,1.0], [0.0,0.0,0.0])
+        }
     }
 
     seeds.coords
