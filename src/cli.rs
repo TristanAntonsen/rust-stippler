@@ -34,4 +34,8 @@ pub struct Opt {
     #[structopt(short = "f", long = "frames")]
     pub frames: bool,
 
+    // Specify cartesian sample spacing
+    #[structopt(short = "s", long = "cartesian-spacing", default_value = "50")]
+    pub cartesian_spacing: u32,
+
 }
