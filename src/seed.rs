@@ -25,17 +25,27 @@ impl Seeds {
         }
     }
 
-    pub fn cartesian(canvas: &Weighted_Canvas, spacing: f64) -> Self {
+    pub fn cartesian(canvas: &Weighted_Canvas, spacing: f64, threshold: f32) -> Self {
         let width = canvas.pixel_weights[0].len();
         let height = canvas.pixel_weights.len();
         let mut seeds = Vec::new();
-        let mut point;
+        let (mut point, mut pixel, mut sampled_value);
         let x_count = (width as f64 / spacing).round() as u32;
         let y_count = (height as f64 / spacing).round() as u32;
-        for x in 0..x_count {
-            for y in 0..y_count {
-                point = Point::new(x as f64,y as f64);
-                seeds.push(point);
+        let x_inc = width as u32 / x_count;
+        let y_inc = height as u32 / y_count;
+
+        for x in 1..x_count {
+            for y in 1..y_count {
+                point = Point::new((x * x_inc) as f64,(y * y_inc) as f64);
+                pixel = nearest_pixel(&point);
+                sampled_value = canvas.read_pixel(
+                    point.x.round() as usize,
+                    point.y.round() as usize
+                );
+                if sampled_value < threshold {
+                    seeds.push(point);
+                }
             }
         }
 
