@@ -111,31 +111,6 @@ pub fn polygon_raster_bbox(poly: &Ordered_Polygon) -> [[i32; 2]; 2] {
 }
 
 
-// very simple line rasterization function
-pub fn rasterize_line_naive(line: &Line, color: [f32; 3], canvas: &mut Canvas) {
-
-    let x1 = line.points[0][0].floor() as i32;
-    let y1 = line.points[0][1].floor() as i32;
-    let x2 = line.points[1][0].floor() as i32;
-    let y2 = line.points[1][1].floor() as i32;
-
-    let dx = x2 - x1;
-    let dy = y2 - y1;
-
-    let mut y;
-    for x in i32::min(x1, x2)..i32::max(x1, x2) {
-        y = y1 + dy * (x - x1) / dx;
-        canvas.write_pixel(x as usize, y as usize, color);
-    }
-}
-
-// very rough polygon boundary rasterization
-pub fn rasterize_polygon_boundary(poly: &Ordered_Polygon, color: [f32; 3], canvas: &mut Canvas) {
-    let edges = poly.create_edges();
-    for edge in edges {
-        rasterize_line_naive(&edge, color, canvas)
-    }
-}
 // rasterizing a polygon into pixels & writing them to the canvas
 pub fn scanline_rasterize_polygon(poly: &Ordered_Polygon, color: [f32; 3], canvas: &mut Canvas) {
     let width = canvas.pixels[0].len() as f64;
@@ -191,6 +166,32 @@ pub fn scanline_nodes(poly: &Ordered_Polygon, scan_y: f64, width: f64) -> Vec<pi
         if nodes[0][1] != nodes[1][1] {}
     }
     nodes
+}
+
+// very simple line rasterization function
+pub fn rasterize_line_naive(line: &Line, color: [f32; 3], canvas: &mut Canvas) {
+
+    let x1 = line.points[0][0].floor() as i32;
+    let y1 = line.points[0][1].floor() as i32;
+    let x2 = line.points[1][0].floor() as i32;
+    let y2 = line.points[1][1].floor() as i32;
+
+    let dx = x2 - x1;
+    let dy = y2 - y1;
+
+    let mut y;
+    for x in i32::min(x1, x2)..i32::max(x1, x2) {
+        y = y1 + dy * (x - x1) / dx;
+        canvas.write_pixel(x as usize, y as usize, color);
+    }
+}
+
+// very rough polygon boundary rasterization
+pub fn rasterize_polygon_boundary(poly: &Ordered_Polygon, color: [f32; 3], canvas: &mut Canvas) {
+    let edges = poly.create_edges();
+    for edge in edges {
+        rasterize_line_naive(&edge, color, canvas)
+    }
 }
 
 // simple function for drawing a rough circle
