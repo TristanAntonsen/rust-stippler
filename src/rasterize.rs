@@ -222,7 +222,6 @@ pub fn color_sampled_voronoi(path: &str, cells: Vec<Vec<Point>>, canvas: &mut Ca
         cx = f64::try_from(centroid.x).unwrap().round();
         cy = f64::try_from(centroid.y).unwrap().round();
         color = color_canvas.read_pixel(cx as usize, cy as usize);
-        println!("{:?}",color);
         scanline_rasterize_polygon(&sorted, color, canvas);
         rasterize_circle(&Point::new(cx / 255.0, cy / 255.0), 3, [0.0,0.0,0.0], canvas)
     }
