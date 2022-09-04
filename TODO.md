@@ -3,6 +3,8 @@
 ## Other ideas:
 - [ ] Colored points
 - [ ] Colored voronoi cells
+- [ ] Better circle drawing function
+- [ ] Optimize polygon rasterizing ([example](https://www.youtube.com/watch?v=t7Ztio8cwqM))
 
 ## Geometry types
 - [X] Point
@@ -37,3 +39,8 @@
 - [X] Read pixel
 - [X] Write pixel to canvas
 - [X] Export as image
+
+## Refactoring
+
+- [ ] Consolidate canvas traits
+- [ ] 
