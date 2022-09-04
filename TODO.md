@@ -2,9 +2,12 @@
 
 ## Other ideas:
 - [ ] Colored points
-- [ ] Colored voronoi cells
+- [X] Colored voronoi cells
 - [ ] Better circle drawing function
 - [ ] Optimize polygon rasterizing ([example](https://www.youtube.com/watch?v=t7Ztio8cwqM))
+- [ ] Calculate point count based on B&W distribution
+- [ ] Calculate threshold based on B&W distribution
+- [ ] Iterative rejection sampling (decreasing threshold in levels)
 
 ## Geometry types
 - [X] Point
@@ -38,7 +41,10 @@
 ## Image
 - [X] Read pixel
 - [X] Write pixel to canvas
-- [X] Export as image
+- [X] Export as im or pixelsage
+
+## Bugs
+- [ ] Fix weight/pixels = 0 problem
 
 ## Refactoring
 
