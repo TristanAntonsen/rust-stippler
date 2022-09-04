@@ -276,26 +276,3 @@ pub fn color_sampled_voronoi(path: &str, cells: Vec<Vec<Point>>, canvas: &mut Ca
     }
 
 }
-
-// ----------- testing logic ------------
-
-pub fn test_centroid(x_size: f64, y_size: f64, canvas: &mut Canvas) {
-    let buffer = 0.0;
-    let color = [0.0, 0.0, 1.0];
-    let rect = Ordered_Polygon {
-        vertices : vec![
-            [buffer, buffer],
-            [buffer + x_size, buffer],
-            [buffer + x_size, buffer + y_size],
-            [buffer, buffer + y_size]
-
-        ]
-    };
-
-    scanline_rasterize_polygon(&rect, color, canvas);
-
-    let centroid = raster_centroid(&rect, canvas);
-
-    println!("Centroid: {:?}",centroid);
-
-}
