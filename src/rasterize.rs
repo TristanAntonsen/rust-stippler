@@ -2,44 +2,6 @@ use crate::geometry::{distance, nearest_pixel, pixel, Line, Ordered_Polygon, Uno
 use crate::{Canvas, Weighted_Canvas};
 use voronoi::Point;
 
-// Function for calculating centroid based on pixels in polygon. Does not use any weighting.
-pub fn raster_centroid(poly: &Ordered_Polygon, canvas: &mut Canvas) -> Point {
-    let width = canvas.pixels[0].len() as f64;
-    let bbox = polygon_raster_bbox(&poly);
-
-    let mut nodes;
-    let mut cx = 0.0;
-    let mut cy = 0.0;
-    let mut pixel_count = 0.0;
-    let (mut x1, mut x2, mut n_a, mut n_b);
-    for y in bbox[1][0]..bbox[1][1] - 1 {
-        nodes = scanline_nodes(&poly, y as f64, width);
-        if nodes.len() > 0 {
-            n_a = nodes[0][0];
-            n_b = nodes[1][0];
-            x1 = i32::min(n_a, n_b);
-            x2 = i32::max(n_a, n_b);
-            for x in x1..x2 - 1 {
-                cx += x as f32;
-                cy += y as f32;
-
-                pixel_count += 1.0;
-            }
-        }
-    }
-
-    if pixel_count == 0.0 {
-        return Point::new(0., 0.);
-    };
-
-    cx /= pixel_count;
-    cy /= pixel_count;
-
-    let centroid = Point::new(cx as f64, cy as f64);
-
-    centroid
-}
-
 // Function for calculating the weighted centroid based on pixels contained in the polygon
 // Assumes convex polygons
 pub fn weighted_raster_centroid(poly: &Ordered_Polygon, weights: &mut Weighted_Canvas) -> Point {
@@ -81,18 +43,43 @@ pub fn weighted_raster_centroid(poly: &Ordered_Polygon, weights: &mut Weighted_C
 
     centroid
 }
-// calculate bbox used for rasterizing a line (naive)
-pub fn line_raster_bbox(line: &Line) -> [pixel; 2] {
-    let x_min = f64::min(line.points[0][0], line.points[1][0]);
-    let x_max = f64::max(line.points[0][0], line.points[1][0]);
-    let y_min = f64::min(line.points[0][1], line.points[1][1]);
-    let y_max = f64::max(line.points[0][1], line.points[1][1]);
 
-    // min and max values of bbox as pixels
-    [
-        nearest_pixel(&Point::new(x_min, x_max)),
-        nearest_pixel(&Point::new(y_min, y_max)),
-    ]
+// Function for calculating centroid based on pixels in polygon. Does not use any weighting.
+pub fn raster_centroid(poly: &Ordered_Polygon, canvas: &mut Canvas) -> Point {
+    let width = canvas.pixels[0].len() as f64;
+    let bbox = polygon_raster_bbox(&poly);
+
+    let mut nodes;
+    let mut cx = 0.0;
+    let mut cy = 0.0;
+    let mut pixel_count = 0.0;
+    let (mut x1, mut x2, mut n_a, mut n_b);
+    for y in bbox[1][0]..bbox[1][1] - 1 {
+        nodes = scanline_nodes(&poly, y as f64, width);
+        if nodes.len() > 0 {
+            n_a = nodes[0][0];
+            n_b = nodes[1][0];
+            x1 = i32::min(n_a, n_b);
+            x2 = i32::max(n_a, n_b);
+            for x in x1..x2 - 1 {
+                cx += x as f32;
+                cy += y as f32;
+
+                pixel_count += 1.0;
+            }
+        }
+    }
+
+    if pixel_count == 0.0 {
+        return Point::new(0., 0.);
+    };
+
+    cx /= pixel_count;
+    cy /= pixel_count;
+
+    let centroid = Point::new(cx as f64, cy as f64);
+
+    centroid
 }
 
 //calculate bbox used for rasterizing a polygon
@@ -122,6 +109,8 @@ pub fn polygon_raster_bbox(poly: &Ordered_Polygon) -> [[i32; 2]; 2] {
         nearest_pixel(&Point::new(y_min, y_max + 1.)), // (min_y, max_y)
     ]
 }
+
+
 // very simple line rasterization function
 pub fn rasterize_line_naive(line: &Line, color: [f32; 3], canvas: &mut Canvas) {
 
