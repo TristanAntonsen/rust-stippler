@@ -1,7 +1,6 @@
 import cv2
 import os
 import sys
-import argparse
 
 
 def create_mp4(image_sequence, output_name, frame_rate):
@@ -46,7 +45,7 @@ if __name__ == "__main__":
     if arg_count >3:
         frame_rate = round(float(args[3]))
     else:
-        frame_rate = 12
+        frame_rate = 15
 
 
     create_mp4(sequence, output_name, frame_rate)
