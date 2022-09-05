@@ -4,6 +4,8 @@ use image::{Rgb, RgbImage};
 use voronoi::Point;
 use crate::seed::Seeds;
 use crate::rasterize_circle;
+use std::error::Error;
+use csv::Writer;
 
 pub fn save_image(path: &str, canvas: Canvas) {
     let width = canvas.pixels.len() as u32;
@@ -83,10 +85,24 @@ pub fn visualize_frame(frame: u16, seeds: &Seeds, width: usize, height: usize, s
         x = f64::try_from(point.x).unwrap() * scale as f64;
         y = f64::try_from(point.y).unwrap() * scale as f64;
         scaled_point = Point::new(x,y);
-        rasterize_circle(&scaled_point, 3, [0.0, 0.0, 0.0], &mut canvas)
+        rasterize_circle(&scaled_point, 4, [0.0, 0.0, 0.0], &mut canvas)
     }
     
     file_name.push_str(&frame.to_string());
     file_name.push_str(".jpg");
     save_image(&file_name[..], canvas);
+}
+
+pub fn export_points(path: &str, points: &Vec<Point>) -> Result<(), Box<dyn Error>> {
+    let mut wtr = Writer::from_path(path)?;
+    let (mut x, mut y);
+    for point in points {
+        x = point.x.to_string();
+        y = point.y.to_string();
+        wtr.write_record(&[x,y]);
+    }
+    wtr.flush()?;
+    Ok(())
+
+
 }

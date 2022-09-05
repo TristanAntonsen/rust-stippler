@@ -7,7 +7,7 @@ mod relax;
 mod seed;
 
 use canvas::{random_color, Canvas, Weighted_Canvas};
-use export::{save_image, save_rgb_image};
+use export::{save_image, save_rgb_image, export_points};
 use geometry::Unordered_Polygon;
 use rasterize::{
     color_sampled_voronoi, rasterize_circle, scanline_rasterize_polygon, weighted_raster_centroid,
@@ -62,11 +62,13 @@ fn main() {
 
     let relaxed = lloyd_relax(&seeds, iterations, WIDTH as f64, file_path, save_frames);
 
+    export_points("start_points.csv", &seeds.coords).expect("Failed to save csv.");
     for seed in seeds.coords {
         rasterize_circle(&seed, 2, _BLACK, &mut canvas2)
     }
+    export_points("end_points.csv", &relaxed).expect("Failed to save csv.");
     for seed in &relaxed {
-        rasterize_circle(&seed, 2, _BLACK, &mut canvas3)
+        rasterize_circle(&seed, 3, _BLACK, &mut canvas3)
     }
 
     let vor_diagram = voronoi(relaxed, WIDTH as f64);
@@ -85,5 +87,6 @@ fn main() {
         save_rgb_image("mosaic.png", color_canvas);
         println!("\tmosaic.jpg");
     }
+
 
 }
