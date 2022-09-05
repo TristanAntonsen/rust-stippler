@@ -24,7 +24,7 @@ pub fn save_image(path: &str, canvas: Canvas) {
             img.put_pixel(x, y, Rgb([r,g,b]));            
         }
     }
-    println!("{} exported.", path);
+    // println!("{} exported.", path);
     
     img.save(path).expect("Could not save image");
 }
@@ -47,7 +47,7 @@ pub fn save_rgb_image(path: &str, canvas: Canvas) {
             img.put_pixel(x, y, Rgb([r,g,b]));            
         }
     }
-    println!("{} exported.", path);
+    // println!("{} exported.", path);
     
     img.save(path).expect("Could not save image");
 }
@@ -68,7 +68,7 @@ pub fn save_grayscale_png(path: &str, canvas: Weighted_Canvas) { // rework with 
             img.put_pixel(x, y, Rgb([g,g,g])); //just using RGB with equal r/g/b values        
         }
     }
-    println!("{} exported.", path);
+    // println!("{} exported.", path);
     
     img.save(path).expect("Could not save png");
 }
@@ -83,7 +83,7 @@ pub fn visualize_frame(frame: u16, seeds: &Seeds, width: usize, height: usize, s
         x = f64::try_from(point.x).unwrap() * scale as f64;
         y = f64::try_from(point.y).unwrap() * scale as f64;
         scaled_point = Point::new(x,y);
-        rasterize_circle(&scaled_point, 4, [0.0, 0.0, 0.0], &mut canvas)
+        rasterize_circle(&scaled_point, 3, [0.0, 0.0, 0.0], &mut canvas)
     }
     
     file_name.push_str(&frame.to_string());

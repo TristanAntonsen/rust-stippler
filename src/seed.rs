@@ -87,4 +87,53 @@ impl Seeds {
 
     }
 
+    pub fn pdf_rejection_sample(weights: &Weighted_Canvas, count: usize, threshold: f32) -> Self {
+
+        // probability of placing seed = 1 / (pdf(grayscale value))
+
+
+        let width = weights.pixel_weights[0].len();
+        let height = weights.pixel_weights.len();
+        let mut seeds: Vec<Point> = Vec::new();
+        let mut x: f64;
+        let mut y: f64;
+        let mut rng = rand::thread_rng();
+        let mut i = 0;
+        let mut point = Point::new(0.0,0.0);
+        let mut pixel;
+        let mut sampled_value;
+
+        // pdf parameters
+        let scalar = 10.0;
+        let mut probability;
+        let mut _p;
+
+
+        while i < count {
+            x = rng.gen::<f64>() * width as f64;
+            y = rng.gen::<f64>() * height as f64;
+            
+            pixel = nearest_pixel(&point);
+            point = Point::new(x,y);
+            sampled_value = weights.read_pixel(
+                point.x.round() as usize,
+                point.y.round() as usize
+            );
+
+            _p = rng.gen::<f64>() as f32;
+            println!("{}",_p);
+            probability = _p * (sampled_value.powf(2.0));
+            println!("{}",probability);
+
+            if probability < threshold {
+                seeds.push(point);
+                i += 1;
+            }
+
+        }
+        Seeds { coords: seeds }
+
+
+    }
+
 }

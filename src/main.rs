@@ -32,6 +32,7 @@ fn main() {
     let points: usize = opt.count;
     let iterations: u16 = opt.iterations;
     let threshold: f32 = opt.threshold;
+    let cartesian_spacing: u32 = opt.cartesian_spacing;
     let save_frames: bool = opt.frames;
     
 
@@ -49,9 +50,10 @@ fn main() {
 
 
     //creating start seeds
-    // let mut seeds = Seeds::uniform(&canvas, points);
-    // let mut seeds = Seeds::cartesian(&weight_canvas,60.0);
+    // let mut seeds = Seeds::uniform(&canvas2, points);
+    // let mut seeds = Seeds::cartesian(&weight_canvas,cartesian_spacing as f64, threshold);
     let seeds = Seeds::rejection_sample(&weight_canvas,points, threshold);
+    // let seeds = Seeds::pdf_rejection_sample(&weight_canvas,points, threshold);
 
     let relaxed = lloyd_relax(&seeds, iterations, WIDTH as f64, file_path, save_frames);
 
@@ -68,6 +70,7 @@ fn main() {
 
     color_sampled_voronoi(file_path, faces, &mut color_canvas, &mut weight_canvas);
     
+    // save_image("sequence/0.jpg", canvas2);
     save_image("start_seeds.jpg", canvas2);
     save_image("end_seeds.jpg", canvas3);
     save_rgb_image("voronoi_colors.png", color_canvas);
