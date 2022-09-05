@@ -5,3 +5,7 @@
 /*.jpg
 /*.png
 /*.mp4
+!sample-images/*.jpg
+!sample-images/*.png
+!results/*.jpg
+!results/*.png
