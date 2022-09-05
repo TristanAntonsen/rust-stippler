@@ -21,7 +21,6 @@ pub struct Opt {
     #[structopt(short = "n", long = "point-count", default_value = "1000")]
     pub count: usize,
 
-
     // Set number of iterations
     #[structopt(short = "i", long = "iterations", default_value = "60")]
     pub iterations: u16,
@@ -35,7 +34,31 @@ pub struct Opt {
     pub frames: bool,
 
     // Specify cartesian sample spacing
-    #[structopt(short = "s", long = "cartesian-spacing", default_value = "50")]
+    #[structopt(short = "c", long = "cartesian", default_value = "50")]
     pub cartesian_spacing: u32,
+
+    // Export mosaic image
+    #[structopt(short = "m", long = "mosaic")]
+    pub save_mosaic: bool,
+ 
+    // Display help
+    #[structopt(short = "h", long = "help")]
+    pub display_help: bool,
+}
+
+pub fn print_help() {
+    println!("USAGE:");
+    println!("    ./stippling -- [weight_image]");
+
+
+    println!("OPTIONS:");
+    println!("    -n, --point-count,      number of points");
+    println!("    -c, --cartesian,        use uniform seed spacing");
+    println!("    -i, --iterations,       number of iterations");
+    println!("    -t, --threshold,        grayscale threshold");
+    println!("    -f, --frames,           export frames");
+    println!("    -m, --mosaic,           export colored voronoi mosaic of final image");
+    println!("    -h, --help,             show help");
+
 
 }
